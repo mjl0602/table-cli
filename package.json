@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mjl0602/admin-cli.git"
+    "url": "git+https://github.com/mjl0602/table-cli.git"
   },
   "keywords": [
     "mjl"
@@ -20,7 +20,7 @@
   "author": "mjl",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mjl0602/admin-cli/issues"
+    "url": "https://github.com/mjl0602/table-cli/issues"
   },
-  "homepage": "https://github.com/mjl0602/admin-cli#readme"
+  "homepage": "https://github.com/mjl0602/table-cli#readme"
 }
