@@ -1,4 +1,4 @@
-import AdminObject from "@/api/adminobject";
+import AdminObject from "@/table-api/adminobject";
 
 export default class Example extends AdminObject {
   // 默认的内容
@@ -11,25 +11,25 @@ export default class Example extends AdminObject {
     /** rules */
   };
 
-  /** 
+  /**
    * 【查询全部】
    * 如果返回数组对象，则页面不翻页，
    * 如果返回{total:88,data:[]}对象，
    * 则页面出现翻页标签。
-   * 
+   *
    * */
-  // static all(query) {
+  // static async all(query) {
   // }
 
   // // 上传修改
-  // static edit(obj) {
+  // static async edit(obj) {
   // }
 
   // // 添加
-  // static add(obj) {
+  // static async add(obj) {
   // }
 
   // // 删除
-  // static deleteObj(obj) {
+  // static async deleteObj(obj) {
   // }
 }

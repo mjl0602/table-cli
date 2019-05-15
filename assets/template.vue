@@ -32,12 +32,12 @@
       </el-table-column>
     </el-table>
     <!-- 翻页 -->
-    <div class="pagination-container" >
+    <div class="pagination-container" v-if="query.total">
       <el-pagination
         :current-page="query.pageNum"
         :page-sizes="[5,10,20,30,50]"
         :page-size="query.pageSize"
-        :total="total"
+        :total="query.total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -63,7 +63,7 @@
 <script>
 
 import AdminTableMixin from "./mixin/admin_mixin.js";
-import AdminObject from "@/api/example";
+import AdminObject from "@/table-api/##filename##.js";
 
 export default {
   filters: {},
@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       // 本页查看的对象名称
-      objStr: "#模板对象#",
+      objStr: "##filename##",
       // 数据源
       source: AdminObject,
     };

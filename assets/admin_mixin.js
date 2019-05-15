@@ -1,4 +1,4 @@
-import AdminObject from "@/api/example";
+import AdminObject from "@/table-api/adminobject";
 
 export default {
   computed: {
