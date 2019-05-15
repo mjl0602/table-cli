@@ -1,0 +1,12 @@
+{
+  "name": "auto_demo",
+  "version": "1.0.0",
+  "description": "'根据json自动生成表单，表格'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "45",
+  "license": "ISC",
+  
+}
