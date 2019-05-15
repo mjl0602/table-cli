@@ -2,7 +2,7 @@ const fs = require("fs");
 const join = require("path").join;
 
 function file(path) {
-  console.log("read file:", path);
+  // console.log("read file:", path);
   return new Promise((r, e) => {
     fs.readFile(path, "utf8", async function(err, data) {
       if (!err) {
@@ -32,6 +32,7 @@ function find(startPath) {
 }
 
 function savefile(path, content) {
+  console.log("保存文件", path);
   return new Promise((r, e) => {
     fs.writeFile(path, content, {}, async function(err) {
       if (!err) {

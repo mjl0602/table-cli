@@ -8,6 +8,10 @@ const { row, input } = require("./tools/builder");
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
+let pages_path = "table-pages";
+let api_path = "table-api";
+let source_path = "table-source";
+
 main(process.argv);
 
 async function main(args) {
@@ -21,7 +25,7 @@ async function main(args) {
     init(args[2]);
     return;
   } else if (args[2] == "build") {
-    console.log("init");
+    console.log("正在通过指定JSON文件创建");
     build(args[3]);
     return;
   }
@@ -30,7 +34,8 @@ async function main(args) {
 
 // build入口
 async function build(command) {
-  if (command == "*") {
+  if (command == "all") {
+    console.log("读取目录下所有文件\n");
     buildAll();
   } else {
     buildFileName(command);
@@ -39,7 +44,7 @@ async function build(command) {
 
 // build全部文件
 async function buildAll(buildFunction = build) {
-  let pathList = find(`${srcPath}/table-source/`);
+  let pathList = find(`${srcPath}/${source_path}/`);
   for (const filePath of pathList) {
     await buildFilePath(filePath);
   }
@@ -48,7 +53,7 @@ async function buildAll(buildFunction = build) {
 
 async function buildFileName(fileName) {
   fileName = fileName.replace(".json", "");
-  await buildFilePath(`${srcPath}/table-source/${fileName}.json`);
+  await buildFilePath(`${srcPath}/${source_path}/${fileName}.json`);
 }
 
 async function buildFilePath(filePath) {
@@ -58,7 +63,7 @@ async function buildFilePath(filePath) {
   );
   fileName = fileName.replace(".json", "");
 
-  console.log(`加载文件: ${filePath}.json`);
+  console.log(`从文件: ${fileName}.json 创建`);
   let tempObject = require(filePath);
   if (!tempObject) {
     console.error(`读取文件错误: ${filePath}.js`);
@@ -89,8 +94,8 @@ async function buildFilePath(filePath) {
   pageTemplate = pageTemplate.replace(/##filename##/g, fileName);
 
   await mkdir("src");
-  await mkdir("src/table-pages");
-  await savefile(`${srcPath}/table-pages/${fileName}Manage.vue`, pageTemplate);
+  await mkdir(`src/${pages_path}`);
+  await savefile(`${srcPath}/${pages_path}/${fileName}Manage.vue`, pageTemplate);
 
   // 示例
   let exampleObjectTemp = await file(`${__dirname}/assets/exampleAdmin.js`);
@@ -99,36 +104,34 @@ async function buildFilePath(filePath) {
     defaultObject,
   );
   exampleObjectTemp = exampleObjectTemp.replace("/** rules */", rules);
-  await mkdir("src/table-api/");
-  await savefile(`${srcPath}/table-api/${fileName}.js`, exampleObjectTemp);
+  await mkdir(`src/${api_path}/`);
+  await savefile(`${srcPath}/${api_path}/${fileName}.js`, exampleObjectTemp);
 
-  // console.log("save success");
-
-  console.log("save success");
+  console.log("保存文件完成\n");
   return;
 }
 
 async function init(jspath) {
   await mkdir("src");
-  await mkdir("src/table-pages");
-  await mkdir("src/table-api");
-  await mkdir("src/table-source");
+  await mkdir(`src/${pages_path}`);
+  await mkdir(`src/${api_path}`);
+  await mkdir(`src/${source_path}`);
 
   // 创建mixin
   let mixinTemplate = await file(`${__dirname}/assets/admin_mixin.js`);
-  await mkdir("src/table-pages/mixin");
-  await savefile(`${srcPath}/table-pages/mixin/admin_mixin.js`, mixinTemplate);
+  await mkdir(`src/${pages_path}/mixin`);
+  await savefile(`${srcPath}/${pages_path}/mixin/admin_mixin.js`, mixinTemplate);
 
   // 父类
   let adminObjectTemp = await file(`${__dirname}/assets/adminobject.js`);
-  await mkdir("src/table-api/");
-  await savefile(`${srcPath}/table-api/adminobject.js`, adminObjectTemp);
+  await mkdir(`src/${api_path}/`);
+  await savefile(`${srcPath}/${api_path}/adminobject.js`, adminObjectTemp);
 
   // 创建example
   let exampleArticle = await file(`${__dirname}/assets/example_article.json`);
-  await mkdir("src/table-source");
+  await mkdir(`src/${source_path}`);
   await savefile(
-    `${srcPath}/table-source/example_article.json`,
+    `${srcPath}/${source_path}/example_article.json`,
     exampleArticle,
   );
 
