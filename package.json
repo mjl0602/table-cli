@@ -1,0 +1,26 @@
+
+{
+  "name": "table-cli",
+  "version": "1.0.0",
+  "description": "自动生成表格，表单文件",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "table-cli": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjl0602/admin-cli.git"
+  },
+  "keywords": [
+    "mjl"
+  ],
+  "author": "mjl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjl0602/admin-cli/issues"
+  },
+  "homepage": "https://github.com/mjl0602/admin-cli#readme"
+}
