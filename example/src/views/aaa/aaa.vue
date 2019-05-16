@@ -11,7 +11,17 @@
         </template>
       </el-table-column>
       
-      <!-- tabel-column insert -->
+      <el-table-column label="用户姓名" align="center">
+    <template slot-scope="scope">
+        {{ scope.row.name }}
+    </template>
+</el-table-column>
+<el-table-column label="用户编号" align="center">
+    <template slot-scope="scope">
+        {{ scope.row.id }}
+    </template>
+</el-table-column>
+
 
       <el-table-column
         align="center"
@@ -45,7 +55,13 @@
         style="width: 400px; margin-left:50px;"
       >
       
-      <!-- form-item insert -->
+      <el-form-item label="用户姓名" prop="name">
+    <el-input v-model="formData.name" placeHolder="请输入用户姓名"/>
+  </el-form-item>
+  <el-form-item label="用户编号" prop="id">
+    <el-input v-model="formData.id" placeHolder="请输入用户编号"/>
+  </el-form-item>
+  
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">提交</el-button>
@@ -55,9 +71,9 @@
   </div>
 </template>
 <script>
-import @per@ from '../mixins/@f@.js'
+import aaaMixin from '../mixins/aaa/aaaMixin.js'
 import Main from '../mixins'
 export default {
-  mixins:[Main,@per@]
+  mixins:[Main,aaaMixin]
 }
 </script>
