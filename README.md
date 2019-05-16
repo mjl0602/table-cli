@@ -15,7 +15,7 @@
 
 #### 使用说明
 
-1. xxxx
+1. node index.js json文件夹所在路径
 2. xxxx
 3. xxxx
 
