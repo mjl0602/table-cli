@@ -1,9 +1,9 @@
 
-const { createfile, readfile, savefile, mkdir} = require('./assets/utils/operate-file.js')
+const { createfile} = require('./assets/utils/operate-file.js')
 
-let execPath = process.cwd();
-let pagePath = `${execPath}/src/pages`;
-let mixinPath = `${execPath}/src/mixins`;
+let execPath = process.cwd(); // 获取命令行输入时的路径
+// let pagePath = `${execPath}/src/pages`;
+// let mixinPath = `${execPath}/src/mixins`;
 
 main(process.argv);
 

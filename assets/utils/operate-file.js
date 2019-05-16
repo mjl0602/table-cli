@@ -55,7 +55,7 @@ function readfile(path){
         // utf8 读取出的的是string 不加读取的是数据流--buffer
             fs.readFile(path, "utf8", function (err, data) {
             if (err) {
-                return console.error(err);
+                console.error(err);
                 reject(err)
             }
             resolve(data)
@@ -67,7 +67,7 @@ function savefile(path,data){
     return new Promise((resolve,reject)=>{
         fs.writeFile(path,data, function (err, data) {
             if (err) {
-                 console.error(err);
+                console.error(err);
                 reject(err)
             }
             resolve(data)
@@ -76,21 +76,15 @@ function savefile(path,data){
 }
 
 //2. fs.mkdir  创建目录 
-function mkdir(path){
-    fs.exists(path,function(exist){
-        console.log('exist',exist)
-        if(exist) return
-        return new Promise((resolve,reject)=>{
-            fs.mkdir(path,function(error){
-                if(error){
-                    console.log(error);
-                    reject(false);
-                }
-                resolve(true)
-                console.log(path+'创建目录成功');
-            })
-        })
-    })
+  function mkdir(path){
+ 
+    if(fs.existsSync(path)){
+        console.log(path + '已存在')
+        
+    }else{
+        fs.mkdirSync(path)
+        console.log(path + ' 创建成功')
+    }
     
 } 
 // 读取模板
@@ -118,30 +112,27 @@ async function createfile(path){
             let res = data.replace(/@@@/g,jsonObj.form[key]).replace(/###/g,key);
             form_html += res  
             defaultForm += `${key}: '', \n  `
-            defaultRules += `${key}:[{ required: true, message: 请输入${jsonObj.form[key]}, trigger: "blur" }]`
+            defaultRules += `${key}:[{ required: true, message: 请输入${jsonObj.form[key]}, trigger: "blur" }], \n`
         }
         let per_fileName = f.split('.')[0]
         let template = await readIndex(); // 初始模板
         let produce = template.replace(/<!-- tabel-column insert -->/,table_html)
                             .replace(/<!-- form-item insert -->/,form_html)
-                            .replace(/@mixin@/g,`${per_fileName}_mixin`)
+                            .replace(/@mixin@/g,`${per_fileName}Mixin`)
         let commonMixin = await readMixin()
         let perMixin = await readPrivateMixin()
         perMixin = perMixin.replace(/\/\/<!-- formData insert -->/,defaultForm).replace(/\/\/<!-- rules insert -->/,defaultRules)
-        await mkdir(resolvePath('/pages'))  // 先创建文件夹
-        await mkdir(resolvePath('/pages/mixins'))
-        
-            await savefile(resolvePath(`/pages/mixins/${per_fileName}_mixin.js`),perMixin);     // 每个页面的mixin
-            await savefile(resolvePath('/pages/mixins/index.js'),commonMixin); // 公共mixin   
-            await savefile(resolvePath(`/pages/${per_fileName}.vue`),produce); // 模板生成  
+        mkdir(resolvePath('../../pages'))  // 先创建文件夹
+        mkdir(resolvePath('../../pages/mixins'))
+        console.log('savefile')
+        savefile(resolvePath(`../../pages/mixins/${per_fileName}Mixin.js`),perMixin);     // 每个页面的mixin
+        savefile(resolvePath('../../pages/mixins/index.js'),commonMixin); // 公共mixin   
+        savefile(resolvePath(`../../pages/${per_fileName}.vue`),produce); // 模板生成  
         
         
     }
 }
 
 module.exports = {
-    createfile,
-    readfile,
-    savefile,
-    mkdir
+    createfile
 }
