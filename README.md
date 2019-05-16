@@ -15,9 +15,9 @@
 
 #### 使用说明
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. node index.js C:/Users/yiyun/Desktop/aaa/auto_demo/source vue-element-admin
+2. C:/Users/yiyun/Desktop/aaa/auto_demo/source json文件所在路径
+3. vue-element-admin 项目名
 
 #### 参与贡献
 

@@ -49,30 +49,32 @@
       <el-form
         :model="formData"
         :rules='rules'
+        ref='ruleForm'
         label-position="left"
         label-width="100px"
         style="width: 400px; margin-left:50px;"
       >
       
       <el-form-item label="用户姓名" prop="name">
-    <el-input v-model="row.name" placeHolder="请输入用户姓名"/>
+    <el-input v-model="formData.name" placeHolder="请输入用户姓名"/>
   </el-form-item>
   <el-form-item label="用户编号" prop="id">
-    <el-input v-model="row.id" placeHolder="请输入用户编号"/>
+    <el-input v-model="formData.id" placeHolder="请输入用户编号"/>
   </el-form-item>
   
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submit">提交</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button type="info" @click="addDialogVisible = false">取消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import Main from './mixins/index.js'
-import userMixin from './mixins/userMixin.js'
+import demo_userMixin from '../mixins/demo_userMixin.js'
+
 export default {
-  mixins:[Main,userMixin]
+  mixins:[demo_userMixin],
+  //<!-- insert -->
 }
 </script>

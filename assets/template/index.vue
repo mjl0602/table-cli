@@ -39,6 +39,7 @@
       <el-form
         :model="formData"
         :rules='rules'
+        ref='ruleForm'
         label-position="left"
         label-width="100px"
         style="width: 400px; margin-left:50px;"
@@ -47,16 +48,16 @@
       <!-- form-item insert -->
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submit">提交</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button type="info" @click="addDialogVisible = false">取消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import Main from './mixins/index.js'
-import @mixin@ from './mixins/@mixin@.js'
+import @per@ from '../mixins/@per@.js'
+import Main from '../mixins'
 export default {
-  mixins:[Main,@mixin@]
+  mixins:[Main,@per@]
 }
 </script>

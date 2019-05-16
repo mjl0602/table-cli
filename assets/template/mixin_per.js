@@ -1,4 +1,6 @@
+
 export default {
+
     data(){
         return {
             formData:{
@@ -21,7 +23,7 @@ export default {
             let res = await new Promise((r,e)=>{
                 r({
                     count: 100,
-                    rows: [1,2,3]
+                    rows: [{id:10,name: 'tom'}]
                 })
             })
             this.listLoading = false
@@ -32,11 +34,14 @@ export default {
         },
         add(){
             this.isNew = true
-            this.formData = this.formData
+            this.formData = Object.assign({},this.defaultData)
+            this.addDialogVisible = true
         },
         edit(row){
             this.isNew = false
             this.formData = row
+            this.addDialogVisible = true
+
         },
         del(row){
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -64,4 +69,8 @@ export default {
         },
         
     }
+    
 }
+
+
+

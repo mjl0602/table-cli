@@ -1,4 +1,7 @@
-export default {
+import Main from './index.js'
+
+const data = {
+
     data(){
         return {
             formData:{
@@ -10,8 +13,8 @@ export default {
 
             },
             rules:{
-               name:[{ required: true, message: 请输入用户姓名, trigger: "blur" }], 
-id:[{ required: true, message: 请输入用户编号, trigger: "blur" }], 
+               name:[{ required: true, message: "请输入用户姓名", trigger: "blur" }], 
+id:[{ required: true, message: "请输入用户编号", trigger: "blur" }], 
 
             }
         }
@@ -25,7 +28,7 @@ id:[{ required: true, message: 请输入用户编号, trigger: "blur" }],
             let res = await new Promise((r,e)=>{
                 r({
                     count: 100,
-                    rows: [1,2,3]
+                    rows: [{id:10,name: 'tom'}]
                 })
             })
             this.listLoading = false
@@ -36,11 +39,14 @@ id:[{ required: true, message: 请输入用户编号, trigger: "blur" }],
         },
         add(){
             this.isNew = true
-            this.formData = this.formData
+            this.formData = Object.assign({},this.defaultData)
+            this.addDialogVisible = true
         },
         edit(row){
             this.isNew = false
             this.formData = row
+            this.addDialogVisible = true
+
         },
         del(row){
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -68,4 +74,6 @@ id:[{ required: true, message: 请输入用户编号, trigger: "blur" }],
         },
         
     }
+    
 }
+export default Object.assign({},main)

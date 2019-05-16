@@ -14,7 +14,7 @@ function main(args) {
     console.log("必须指定来源文件，命令格式：*******");
     return;
   }  else {
-    createfile(args[2])
+    createfile(args[2],args[3])
     return;
   }
   console.log("over", args[2]);

@@ -30,6 +30,14 @@ export default {
         },
         edit(){
             console.log('click edit')
+        },
+        handleSizeChange(size) {
+          this.query.pageSize = size
+          this.getData()
+        },
+        handleCurrentChange(num) {
+          this.query.pageNum = num
+          this.getData()
         }
     }
 }

@@ -88,13 +88,24 @@ function savefile(path,data){
     
 } 
 // 读取模板
-async function createfile(path){
-    
+async function createfile(path,target){
     var files = fs.readdirSync(path);// 读取目录下所有json文件
     var js_files = files.filter((f)=>{
         return f.endsWith('.json');
     });
+    if(js_files.length<1){
+        console.log(path+ '请确保该文件夹下含有JSON文件')
+        return
+    }
+    let commonMixin = await readMixin()
    
+    // mkdir(resolvePath('../../pages'))  // 先创建文件夹
+    // mkdir(resolvePath('../../pages/mixins'))
+    mkdir(resolvePath(`../../${target}/src/views/mixins`))
+    console.log('saveMixin')
+    // savefile(resolvePath('../../pages/mixins/index.js'),commonMixin); // 公共mixin
+    savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
+
     for(var f of js_files){
         let jsonObj = require(path+'/'+f);
         // 生成 table-column
@@ -112,24 +123,23 @@ async function createfile(path){
             let res = data.replace(/@@@/g,jsonObj.form[key]).replace(/###/g,key);
             form_html += res  
             defaultForm += `${key}: '', \n  `
-            defaultRules += `${key}:[{ required: true, message: 请输入${jsonObj.form[key]}, trigger: "blur" }], \n`
+            defaultRules += `${key}:[{ required: true, message: "请输入${jsonObj.form[key]}", trigger: "blur" }], \n`
         }
         let per_fileName = f.split('.')[0]
         let template = await readIndex(); // 初始模板
-        let produce = template.replace(/<!-- tabel-column insert -->/,table_html)
-                            .replace(/<!-- form-item insert -->/,form_html)
-                            .replace(/@mixin@/g,`${per_fileName}Mixin`)
-        let commonMixin = await readMixin()
+        
         let perMixin = await readPrivateMixin()
         perMixin = perMixin.replace(/\/\/<!-- formData insert -->/,defaultForm).replace(/\/\/<!-- rules insert -->/,defaultRules)
-        mkdir(resolvePath('../../pages'))  // 先创建文件夹
-        mkdir(resolvePath('../../pages/mixins'))
-        console.log('savefile')
-        savefile(resolvePath(`../../pages/mixins/${per_fileName}Mixin.js`),perMixin);     // 每个页面的mixin
-        savefile(resolvePath('../../pages/mixins/index.js'),commonMixin); // 公共mixin   
-        savefile(resolvePath(`../../pages/${per_fileName}.vue`),produce); // 模板生成  
-        
-        
+        let produce = template.replace(/<!-- tabel-column insert -->/,table_html)
+                            .replace(/<!-- form-item insert -->/,form_html)
+                            .replace(/@per@/g,`${per_fileName}Mixin`)
+        savefile(resolvePath(`../../${target}/src/views/mixins/${per_fileName}Mixin.js`),perMixin);
+        // mkdir(resolvePath(`../../pages/${per_fileName}`)); // 模板生成 
+        // savefile(resolvePath(`../../pages/${per_fileName}/index.vue`),produce); // 模板生成  
+        // savefile(resolvePath(`../../${target}/src/views/mixins/${per_fileName}Mixin.js`),perMixin); // 公共mixin
+        mkdir(resolvePath(`../../${target}/src/views/${per_fileName}`)); // 模板生成 
+        savefile(resolvePath(`../../${target}/src/views/${per_fileName}/index.vue`),produce); // 模板生成  
+
     }
 }
 
