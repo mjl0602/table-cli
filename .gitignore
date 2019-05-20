@@ -1,22 +1,22 @@
 .DS_Store
-vue-element-admin/node_modules/
-vue-element-admin/dist/
-vue-element-admin/npm-debug.log*
-vue-element-admin/yarn-debug.log*
-vue-element-admin/yarn-error.log*
-vue-element-admin/**/*.log
-vue-element-admin/tests/**/coverage/
-vue-element-admin/tests/e2e/reports
-vue-element-admin/selenium-debug.log
+vue-admin/node_modules/
+vue-admin/dist/
+vue-admin/npm-debug.log*
+vue-admin/yarn-debug.log*
+vue-admin/yarn-error.log*
+vue-admin/**/*.log
+vue-admin/tests/**/coverage/
+vue-admin/tests/e2e/reports
+vue-admin/selenium-debug.log
 
 # Editor directories and files
-vue-element-admin/.idea
-vue-element-admin/.vscode
-vue-element-admin/*.suo
-vue-element-admin/*.ntvs*
-vue-element-admin/*.njsproj
-vue-element-admin/*.sln
-vue-element-admin/*.local
+vue-admin/.idea
+vue-admin/.vscode
+vue-admin/*.suo
+vue-admin/*.ntvs*
+vue-admin/*.njsproj
+vue-admin/*.sln
+vue-admin/*.local
 
-vue-element-admin/package-lock.json
-vue-element-admin/yarn.lock
+vue-admin/package-lock.json
+vue-admin/yarn.lock
