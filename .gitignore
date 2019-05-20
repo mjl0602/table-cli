@@ -5,7 +5,6 @@ vue-element-admin/npm-debug.log*
 vue-element-admin/yarn-debug.log*
 vue-element-admin/yarn-error.log*
 vue-element-admin/**/*.log
-vue-element-admin/
 vue-element-admin/tests/**/coverage/
 vue-element-admin/tests/e2e/reports
 vue-element-admin/selenium-debug.log
