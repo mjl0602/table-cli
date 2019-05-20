@@ -14,6 +14,14 @@ export default {
             }
         }
     },
+    watch: {
+        addDialogVisible(val) {
+            if(!val){
+                this.$refs.ruleForm.resetFields()
+                this.formData = Object.assign({},this.defaultData)
+            }
+        },
+    },
     created() {
         this.defaultData = Object.assign({},this.formData)
     },
@@ -32,6 +40,7 @@ export default {
                 this.total = res.count
             }
         },
+    
         add(){
             this.isNew = true
             this.formData = Object.assign({},this.defaultData)
@@ -39,7 +48,7 @@ export default {
         },
         edit(row){
             this.isNew = false
-            this.formData = row
+            this.formData = Object.assign({},row)
             this.addDialogVisible = true
 
         },
@@ -61,6 +70,7 @@ export default {
                     }else{
                         this.$message.success('修改成功')
                     }
+                    this.addDialogVisible = false
                 } else {
                 console.log('error submit!!');
                 return false;

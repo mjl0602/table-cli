@@ -14,6 +14,10 @@ function main(args) {
     console.log("必须指定来源文件，命令格式：*******");
     return;
   }  else {
+    if(!args[3]){
+      console.log("必须指定项目所在文件，命令格式：*******");
+      return;
+    }
     createfile(args[2],args[3])
     return;
   }

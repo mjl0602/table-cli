@@ -7,35 +7,30 @@ function resolvePath(url){
 // 读取 公共mixins
 async function readMixin(){
     let path = resolvePath('../template/mixins.js')
-    console.log('path',__dirname)
     let data = await readfile(path)
     return data
 }
 // 读取 私有mixins
 async function readPrivateMixin(){
     let path = resolvePath('../template/mixin_per.js')
-    console.log('path',__dirname)
     let data = await readfile(path)
     return data
 }
 // 读取初始模板
 async function readIndex(){
     let path = resolvePath('../template/index.vue')
-    console.log('path',__dirname)
     let data = await readfile(path)
     return data
 }
 // 读取表格列模板
 async function readTable(){
     let path = resolvePath('../template/table-template.html')
-    console.log('path',__dirname)
     let data = await readfile(path)
     return data
 }
 // 读取表单项模板
 async function readForm(){
     let path = resolvePath('../template/form-template.html')
-    console.log('path',__dirname)
     let data = await readfile(path)
     return data
 }
@@ -105,7 +100,7 @@ async function jsontohtml({json,path,target,type,topPath}){
         if(jsonObj.table){
             for(var key in jsonObj.table){
                 let data = await readTable(); // 表格的列
-                let res = data.replace(/@@@/g,jsonObj.table[key]).replace(/###/g,key);
+                let res = data.replace(/@@@/g,jsonObj.table[key]['description']).replace(/###/g,key);
                 table_html += res  
             }
         }
@@ -117,10 +112,10 @@ async function jsontohtml({json,path,target,type,topPath}){
         if(jsonObj.form){
             for(var key in jsonObj.form){
                 let data = await readForm(); // 表单项
-                let res = data.replace(/@@@/g,jsonObj.form[key]).replace(/###/g,key);
+                let res = data.replace(/@@@/g,jsonObj.form[key]['description']).replace(/###/g,key);
                 form_html += res  
                 defaultForm += `${key}: '', \n  `
-                defaultRules += `${key}:[{ required: true, message: "请输入${jsonObj.form[key]}", trigger: "blur" }], \n`
+                defaultRules += `${key}:[{ required: true, message: "请输入${jsonObj.form[key]['description']}", trigger: "blur" }], \n`
             }
         }
         let per_fileName = f.split('.')[0]
