@@ -5,6 +5,27 @@ export default {
         },
     },
     data(){
+        var checkInteger = (rule, value, callback) => {
+            if (!/^[1-9][0-9]*+$/.test(value)) {
+              callback(new Error('请输入整数'));
+            } else {
+              callback();
+            }
+          }; 
+        var checkNumber = (rule, value, callback) => {
+            if (!/^\d+(\.\d{0,2})?$/.test(value)) {
+              callback(new Error('请输入数字值,最多两位小数'));
+            } else {
+              callback();
+            }
+          };
+        var checkPhone = (rule, value, callback) => {
+            if (!/^1[3-9]\d{9}$/.test(value)) {
+              callback(new Error('请输入正确的手机号码'));
+            } else {
+              callback();
+            }
+          };
         return {
             isNew:false,
             list: [],

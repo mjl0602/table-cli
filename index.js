@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 const { createfile} = require('./assets/utils/operate-file.js')
 
@@ -15,8 +16,7 @@ function main(args) {
     return;
   }  else {
     if(!args[3]){
-      console.log("必须指定项目所在文件，命令格式：*******");
-      return;
+     args[3] = execPath
     }
     createfile(args[2],args[3])
     return;

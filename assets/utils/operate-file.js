@@ -72,7 +72,7 @@ function savefile(path,data){
 
 //2. fs.mkdir  创建目录 
   function mkdir(path){
- 
+    console.log('path',path)
     if(fs.existsSync(path)){
         console.log(path + '已存在')
         
@@ -87,10 +87,14 @@ async function jsontohtml({json,path,target,type,topPath}){
     //     return f.endsWith('.json');
     // });
     let commonMixin = await readMixin()
-    mkdir(resolvePath(`../../${target}/src`))
-    mkdir(resolvePath(`../../${target}/src/views`))
-    mkdir(resolvePath(`../../${target}/src/views/mixins`))
-    savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
+    // mkdir(resolvePath(`../../${target}/src`))
+    // mkdir(resolvePath(`../../${target}/src/views`))
+    // mkdir(resolvePath(`../../${target}/src/views/mixins`))
+    // savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
+    mkdir(`${target}/src`)
+    mkdir(`${target}/src/views`)
+    mkdir(`${target}/src/views/mixins`)
+    savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
 
     for(var f of json){
         var requirePath = topPath?`${path}/${topPath}/${f}`:`${path}/${f}`
@@ -129,13 +133,13 @@ async function jsontohtml({json,path,target,type,topPath}){
         
         if(type === 'file'){
             produce = produce.replace(/@f@/g,`${per_fileName}Mixin`)
-            mkdir(resolvePath(`../../${target}/src/views/${per_fileName}`));  
-            savefile(resolvePath(`../../${target}/src/views/${per_fileName}/index.vue`),produce); // 模板生成 
-            savefile(resolvePath(`../../${target}/src/views/mixins/${per_fileName}Mixin.js`),perMixin);
+            mkdir(`${target}/src/views/${per_fileName}`);  
+            savefile(`${target}/src/views/${per_fileName}/index.vue`,produce); // 模板生成 
+            savefile(`${target}/src/views/mixins/${per_fileName}Mixin.js`,perMixin);
         }else{
             produce = produce.replace(/@f@/g,`${topPath}/${per_fileName}Mixin`)
-            savefile(resolvePath(`../../${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`),perMixin);
-            savefile(resolvePath(`../../${target}/src/views/${topPath}/${per_fileName}.vue`),produce); // 模板生成 
+            savefile(`${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`,perMixin);
+            savefile(`${target}/src/views/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
         }
          
 
@@ -150,11 +154,16 @@ async function createfile(path,target='example'){
     }
   
     let commonMixin = await readMixin()
-    mkdir(resolvePath(`../../${target}`))
-    mkdir(resolvePath(`../../${target}/src`))
-    mkdir(resolvePath(`../../${target}/src/views`))
-    mkdir(resolvePath(`../../${target}/src/views/mixins`))
-    savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
+    // mkdir(resolvePath(`${target}`))
+    // mkdir(resolvePath(`${target}/src`))
+    // mkdir(resolvePath(`${target}/src/views`))
+    // mkdir(resolvePath(`${target}/src/views/mixins`))
+    // savefile(resolvePath(`${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
+    mkdir(`${target}`)
+    mkdir(`${target}/src`)
+    mkdir(`${target}/src/views`)
+    mkdir(`${target}/src/views/mixins`)
+    savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
     var json_files = files.filter((f)=>{
         return f.endsWith('.json');
     });
@@ -172,8 +181,8 @@ async function createfile(path,target='example'){
              
             if(res.isDirectory()){
                 var datafiles = fs.readdirSync(path+'/'+files[i]);
-                mkdir(resolvePath(`../../${target}/src/views/${files[i]}`))
-                mkdir(resolvePath(`../../${target}/src/views/mixins/${files[i]}`))
+                mkdir(`${target}/src/views/${files[i]}`)
+                mkdir(`${target}/src/views/mixins/${files[i]}`)
                 var data_files = datafiles.filter((f)=>{
                     return f.endsWith('.json');
                 });

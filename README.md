@@ -15,13 +15,15 @@
 
 #### 使用说明
 
-1. node index.js C:/Users/yiyun/Desktop/aaa/auto_demo/source vue-element-admin
-2. C:/Users/yiyun/Desktop/aaa/auto_demo/source  // json文件所在路径
-3. vue-element-admin 项目名
+1. npm install -g 安全全局命令
+2. yp-cli json project // json：json文件夹所在绝对路径 project: 默认指向当前命令输入路径 ，手动输入请传入绝对路径
+3. 生成的文件夹 src/mixin src/json文件名
+4. 路由需要自己配置
+5. 路由文件请参考source文件夹  -- yapi的数据结构
 
 #### 参与贡献
 
-1. Fork 本仓库
+1. www.github.com/mjl0602 table-cli
 2. 新建 Feat_xxx 分支
 3. 提交代码
 4. 新建 Pull Request

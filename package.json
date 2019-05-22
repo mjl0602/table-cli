@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "yp-cli": "./index.js"
+  },
   "author": "45",
   "license": "ISC"
 }

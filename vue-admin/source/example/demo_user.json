@@ -1,0 +1,30 @@
+{
+    "table": {
+        "id": {
+          "type": "number",
+          "description": "医生编号"
+        },
+        "name": {
+          "type": "string",
+          "description": "医生姓名"
+        },
+        "tel": {
+          "type": "string",
+          "description": "医生电话"
+        }
+      },
+      "form": {
+        "id": {
+          "type": "number",
+          "description": "医生编号"
+        },
+        "name": {
+          "type": "string",
+          "description": "医生姓名"
+        },
+        "tel": {
+          "type": "string",
+          "description": "医生电话"
+        }
+      }
+}
