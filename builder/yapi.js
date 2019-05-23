@@ -1,4 +1,3 @@
-
 const { file, find, savefile, mkdir } = require("../tools/file");
 
 const { row, input } = require("../tools/builder");
@@ -9,19 +8,24 @@ let source_path = "table-source";
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
+let assetsPath = `${__dirname}/../assets`;
 
 // build入口
- async function yapi_build(command) {
+async function build(command) {
+  if (!command) {
+    console.log("build后缺少文件命令,是否想输入build all?\n");
+    return;
+  }
   if (command == "all") {
     console.log("读取目录下所有文件\n");
-    buildAll();
+    await buildAll();
   } else {
-    buildFileName(command);
+    await buildFileName(command);
   }
 }
 
 // build全部文件
-export async function buildAll(buildFunction = yapi_build) {
+async function buildAll(buildFunction = build) {
   let pathList = find(`${srcPath}/${source_path}/`);
   for (const filePath of pathList) {
     await buildFilePath(filePath);
@@ -29,12 +33,12 @@ export async function buildAll(buildFunction = yapi_build) {
   console.log("全部创建完成");
 }
 
- async function buildFileName(fileName) {
+async function buildFileName(fileName) {
   fileName = fileName.replace(".json", "");
   await buildFilePath(`${srcPath}/${source_path}/${fileName}.json`);
 }
 
- async function buildFilePath(filePath) {
+async function buildFilePath(filePath) {
   let fileName = filePath.substring(
     filePath.lastIndexOf("/") + 1,
     filePath.length,
@@ -66,17 +70,20 @@ export async function buildAll(buildFunction = yapi_build) {
   }
 
   // 创建页面
-  let pageTemplate = await file(`${__dirname}/assets/template.vue`);
+  let pageTemplate = await file(`${assetsPath}/template.vue`);
   pageTemplate = pageTemplate.replace("<!-- table insert -->", table);
   pageTemplate = pageTemplate.replace("<!-- form insert -->", form);
   pageTemplate = pageTemplate.replace(/##filename##/g, fileName);
 
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
-  await savefile(`${srcPath}/${pages_path}/${fileName}Manage.vue`, pageTemplate);
+  await savefile(
+    `${srcPath}/${pages_path}/${fileName}Manage.vue`,
+    pageTemplate,
+  );
 
   // 示例
-  let exampleObjectTemp = await file(`${__dirname}/assets/exampleAdmin.js`);
+  let exampleObjectTemp = await file(`${assetsPath}/exampleAdmin.js`);
   exampleObjectTemp = exampleObjectTemp.replace(
     "/** property */",
     defaultObject,
@@ -89,34 +96,35 @@ export async function buildAll(buildFunction = yapi_build) {
   return;
 }
 
-async function yapi_init(jspath) {
+async function init(jspath) {
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
   await mkdir(`src/${api_path}`);
   await mkdir(`src/${source_path}`);
 
   // 创建mixin
-  let mixinTemplate = await file(`${__dirname}/assets/admin_mixin.js`);
+  let mixinTemplate = await file(`${assetsPath}/admin_mixin.js`);
   await mkdir(`src/${pages_path}/mixin`);
-  await savefile(`${srcPath}/${pages_path}/mixin/admin_mixin.js`, mixinTemplate);
+  await savefile(
+    `${srcPath}/${pages_path}/mixin/admin_mixin.js`,
+    mixinTemplate,
+  );
 
   // 父类
-  let adminObjectTemp = await file(`${__dirname}/assets/adminobject.js`);
+  let adminObjectTemp = await file(`${assetsPath}/adminobject.js`);
   await mkdir(`src/${api_path}/`);
   await savefile(`${srcPath}/${api_path}/adminobject.js`, adminObjectTemp);
 
   // 创建example
-  let exampleArticle = await file(`${__dirname}/assets/yapi/demo.json`);
+  let exampleArticle = await file(`${assetsPath}/yapi/demo.json`);
   await mkdir(`src/${source_path}`);
-  await savefile(
-    `${srcPath}/${source_path}/example_article.json`,
-    exampleArticle,
-  );
+  await savefile(`${srcPath}/${source_path}/demo.json`, exampleArticle);
 
-  await yapi_build("demo");
+  await build("demo");
   console.log("yapi_init 完成");
 }
+
 module.exports = {
-  yapi_build,
-  yapi_init,
+  build,
+  init,
 };
