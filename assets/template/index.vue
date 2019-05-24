@@ -17,17 +17,17 @@
         align="center"
         fixed="right"
         label="操作"
-        width="100"
+        width="200"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="delData(scope.row)">删除</el-button>
-          <el-button type="text" size="small" @click='editData(scope.row)'>编辑</el-button>
+          <el-button type="danger" size="small" @click="delData(scope.row)">删除</el-button>
+          <el-button type="primary" size="small" @click='editData(scope.row)'>编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
       :current-page="query.pageNum"
-      :page-sizes="[100, 200, 300, 400]"
+      :page-sizes="[10, 20, 30, 50]"
       :page-size="query.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -71,14 +71,32 @@ export default {
       }
     }
   },
-
+   watch: {
+    addDialogVisible(val) {
+      if (!val) {
+        this.$refs.ruleForm.resetFields()
+      }
+    }
+  },
+  mounted(){
+    this.getData()
+  },
   methods:{
-      addData(){
+    getData(){
+      this.defaultData = Object.assign({},this.formData)
+      this.get('enterprise')
+    },
+      editData(row){
+          this.isNew = false
+          this.formData = Object.assign({},row)
+          this.addDialogVisible = true
 
-      },
-      editData(){
-
-      },
+        },
+        addData(){
+          this.isNew = true
+          this.formData = Object.assign({},this.defaultData)
+          this.addDialogVisible = true
+        },
       delData(){
 
       },

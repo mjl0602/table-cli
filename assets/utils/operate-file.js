@@ -135,13 +135,17 @@ async function jsontohtml({json,path,target,type,topPath}){
         
         if(type === 'file'){
             produce = produce.replace(/@f@/g,`${per_fileName}Mixin`)
-            mkdir(`${target}/src/views/${per_fileName}`);  
-            savefile(`${target}/src/views/${per_fileName}/index.vue`,produce); // 模板生成 
+            mkdir(`${target}/src/views/${per_fileName}`);
+            if(!fs.existsSync(`${target}/src/views/${per_fileName}/index.vue`)){  
+                savefile(`${target}/src/views/${per_fileName}/index.vue`,produce); // 模板生成 
             // savefile(`${target}/src/views/mixins/${per_fileName}Mixin.js`,perMixin);
+            }
         }else{
             produce = produce.replace(/@f@/g,`${topPath}/${per_fileName}Mixin`)
             // savefile(`${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`,perMixin);
-            savefile(`${target}/src/views/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
+            if(!fs.existsSync(`${target}/src/views/${topPath}/${per_fileName}.vue`)){  
+                savefile(`${target}/src/views/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
+            }
         }
          
 
