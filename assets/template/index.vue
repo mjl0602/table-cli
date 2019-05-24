@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
    
-    <el-button type="primary" @click="add">
+    <el-button type="primary" @click="addData">
       新增
     </el-button>
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
@@ -20,8 +20,8 @@
         width="100"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
-          <el-button type="text" size="small" @click='edit(scope.row)'>编辑</el-button>
+          <el-button type="text" size="small" @click="delData(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click='editData(scope.row)'>编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -55,9 +55,36 @@
   </div>
 </template>
 <script>
-import @per@ from '../mixins/@f@.js'
 import Main from '../mixins'
 export default {
-  mixins:[Main,@per@]
+  mixins:[Main],
+  data(){
+    return {
+      formData: {
+          //<!-- formData insert -->
+      },
+      defaultData:{
+
+      },
+      rules: {
+        //<!-- rules insert -->
+      }
+    }
+  },
+
+  methods:{
+      addData(){
+
+      },
+      editData(){
+
+      },
+      delData(){
+
+      },
+      submitForm(){
+        
+      }
+  }
 }
 </script>

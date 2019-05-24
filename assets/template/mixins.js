@@ -1,3 +1,4 @@
+
 export default {
     computed: {
         dialogTitle() {
@@ -5,27 +6,7 @@ export default {
         },
     },
     data(){
-        var checkInteger = (rule, value, callback) => {
-            if (!/^[1-9][0-9]*+$/.test(value)) {
-              callback(new Error('请输入整数'));
-            } else {
-              callback();
-            }
-          }; 
-        var checkNumber = (rule, value, callback) => {
-            if (!/^\d+(\.\d{0,2})?$/.test(value)) {
-              callback(new Error('请输入数字值,最多两位小数'));
-            } else {
-              callback();
-            }
-          };
-        var checkPhone = (rule, value, callback) => {
-            if (!/^1[3-9]\d{9}$/.test(value)) {
-              callback(new Error('请输入正确的手机号码'));
-            } else {
-              callback();
-            }
-          };
+     
         return {
             isNew:false,
             list: [],
@@ -40,17 +21,59 @@ export default {
         }
     },
     mounted(){
-        this.getData()
+        
     },
+
     methods:{
-        getData(){
-            console.log('click getData')
+        get(){
+          this.listLoading = true 
+            let res =  new Promise((r,e)=>{
+                r({
+                    count: 100,
+                    rows: [{id:10,name: 'tom'}]
+                })
+            })
+            this.listLoading = false
+            if(res){
+                this.list = res.rows
+                this.total = res.count
+            }
+        },
+        edit(row){
+          this.isNew = false
+          this.formData = Object.assign({},row)
+          this.addDialogVisible = true
+
         },
         add(){
-            console.log('click add')
+          this.isNew = true
+          this.formData = Object.assign({},this.defaultData)
+          this.addDialogVisible = true
         },
-        edit(){
-            console.log('click edit')
+        del(row){
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message.success('删除成功！')
+            }).catch(() => {});
+        },
+        submitForm() {
+          // 默认表单ref=ruleForm
+          this.$refs.ruleForm.validate((valid) => {
+            if (valid) {
+                if(this.isNew){
+                    this.$message.success('添加成功')
+                }else{
+                    this.$message.success('修改成功')
+                }
+                this.addDialogVisible = false
+            } else {
+            console.log('error submit!!');
+            return false;
+            }
+          });
         },
         handleSizeChange(size) {
           this.query.pageSize = size

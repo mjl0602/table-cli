@@ -125,20 +125,22 @@ async function jsontohtml({json,path,target,type,topPath}){
         let per_fileName = f.split('.')[0]
         let template = await readIndex(); // 初始模板
         
-        let perMixin = await readPrivateMixin()
-        perMixin = perMixin.replace(/\/\/<!-- formData insert -->/,defaultForm).replace(/\/\/<!-- rules insert -->/,defaultRules)
+        // let perMixin = await readPrivateMixin()
+        // perMixin = perMixin.replace(/\/\/<!-- formData insert -->/,defaultForm).replace(/\/\/<!-- rules insert -->/,defaultRules)
         let produce = template.replace(/<!-- tabel-column insert -->/,table_html)
                             .replace(/<!-- form-item insert -->/,form_html)
-                            .replace(/@per@/g,`${per_fileName}Mixin`)
+                            // .replace(/@per@/g,`${per_fileName}Mixin`)
+                            .replace(/\/\/<!-- formData insert -->/,defaultForm)
+                            .replace(/\/\/<!-- rules insert -->/,defaultRules)
         
         if(type === 'file'){
             produce = produce.replace(/@f@/g,`${per_fileName}Mixin`)
             mkdir(`${target}/src/views/${per_fileName}`);  
             savefile(`${target}/src/views/${per_fileName}/index.vue`,produce); // 模板生成 
-            savefile(`${target}/src/views/mixins/${per_fileName}Mixin.js`,perMixin);
+            // savefile(`${target}/src/views/mixins/${per_fileName}Mixin.js`,perMixin);
         }else{
             produce = produce.replace(/@f@/g,`${topPath}/${per_fileName}Mixin`)
-            savefile(`${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`,perMixin);
+            // savefile(`${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`,perMixin);
             savefile(`${target}/src/views/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
         }
          
@@ -182,7 +184,7 @@ async function createfile(path,target='example'){
             if(res.isDirectory()){
                 var datafiles = fs.readdirSync(path+'/'+files[i]);
                 mkdir(`${target}/src/views/${files[i]}`)
-                mkdir(`${target}/src/views/mixins/${files[i]}`)
+                // mkdir(`${target}/src/views/mixins/${files[i]}`)
                 var data_files = datafiles.filter((f)=>{
                     return f.endsWith('.json');
                 });
