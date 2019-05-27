@@ -48,7 +48,7 @@
       <!-- form-item insert -->
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button type="primary" @click="submit">提交</el-button>
         <el-button type="info" @click="addDialogVisible = false">取消</el-button>
       </span>
     </el-dialog>
