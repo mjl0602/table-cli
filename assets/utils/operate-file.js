@@ -93,8 +93,10 @@ async function jsontohtml({json,path,target,type,topPath}){
     // savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
     mkdir(`${target}/src`)
     mkdir(`${target}/src/views`)
-    mkdir(`${target}/src/views/mixins`)
-    savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
+    let result = mkdir(`${target}/src/views/mixins`)
+    if(!fs.existsSync(`${target}/src/views/mixins/index.js`)){  
+        savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
+    }
 
     for(var f of json){
         var requirePath = topPath?`${path}/${topPath}/${f}`:`${path}/${f}`

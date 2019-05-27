@@ -35,7 +35,7 @@
       @current-change="handleCurrentChange"
     />
     <!-- 编辑 -->
-    <el-dialog :visible.sync="addDialogVisible" :title="dialogTitle">
+    <el-dialog :visible.sync="addDialogVisible" :before-close="handleClose" :title="dialogTitle">
       <el-form
         :model="formData"
         :rules='rules'
