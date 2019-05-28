@@ -86,17 +86,17 @@ async function jsontohtml({json,path,target,type,topPath}){
     // var json_files = files.filter((f)=>{
     //     return f.endsWith('.json');
     // });
-    let commonMixin = await readMixin()
-    // mkdir(resolvePath(`../../${target}/src`))
-    // mkdir(resolvePath(`../../${target}/src/views`))
-    // mkdir(resolvePath(`../../${target}/src/views/mixins`))
-    // savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
-    mkdir(`${target}/src`)
-    mkdir(`${target}/src/views`)
-    let result = mkdir(`${target}/src/views/mixins`)
-    if(!fs.existsSync(`${target}/src/views/mixins/index.js`)){  
-        savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
-    }
+    // let commonMixin = await readMixin()
+    // // mkdir(resolvePath(`../../${target}/src`))
+    // // mkdir(resolvePath(`../../${target}/src/views`))
+    // // mkdir(resolvePath(`../../${target}/src/views/mixins`))
+    // // savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
+    // mkdir(`${target}/src`)
+    // mkdir(`${target}/src/views`)
+    // let result = mkdir(`${target}/src/views/mixins`)
+    // if(!fs.existsSync(`${target}/src/views/mixins/index.js`)){  
+    //     savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
+    // }
 
     for(var f of json){
         var requirePath = topPath?`${path}/${topPath}/${f}`:`${path}/${f}`
@@ -171,7 +171,9 @@ async function createfile(path,target='example'){
     mkdir(`${target}/src`)
     mkdir(`${target}/src/views`)
     mkdir(`${target}/src/views/mixins`)
-    savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
+    if(!fs.existsSync(`${target}/src/views/mixins/index.js`)){  
+        savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
+    }
     var json_files = files.filter((f)=>{
         return f.endsWith('.json');
     });
