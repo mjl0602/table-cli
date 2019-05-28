@@ -66,10 +66,10 @@ export default {
   mixins:[Main],
   data(){
     return {
-      formData: {
+      defaultData: {
           //<!-- formData insert -->
       },
-      defaultData:{
+      formData:{
 
       },
       rules: {
@@ -89,7 +89,7 @@ export default {
   },
   methods:{
     getData(){
-      this.defaultData = Object.assign({},this.formData)
+      this.formData = Object.assign({},this.defaultData)
       this.get('enterprise')
     },
       editData(row){
