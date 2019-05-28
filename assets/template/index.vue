@@ -1,10 +1,12 @@
 <template>
   <div class="app-container">
-   
-    <el-button type="primary" @click="addData">
+   <el-header>
+     <el-button type="primary" @click="addData">
       新增
     </el-button>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
+   </el-header>
+    <el-main>
+      <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
       <el-table-column align="center" label="ID" min-width="100">
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -25,7 +27,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
+    </el-main>
+    <el-footer>
+      <el-pagination
       :current-page="query.pageNum"
       :page-sizes="[10, 20, 30, 50]"
       :page-size="query.pageSize"
@@ -34,6 +38,8 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    </el-footer>
+    
     <!-- 编辑 -->
     <el-dialog :visible.sync="addDialogVisible" :before-close="handleClose" :title="dialogTitle">
       <el-form
@@ -48,7 +54,7 @@
       <!-- form-item insert -->
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submit">提交</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button type="info" @click="addDialogVisible = false">取消</el-button>
       </span>
     </el-dialog>

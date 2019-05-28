@@ -47,7 +47,7 @@ export default {
               this.$message.success('删除成功！')
             }).catch(() => {});
         },
-        submitForm() {
+        submit() {
           // 默认表单ref=ruleForm
           this.$refs.ruleForm.validate((valid) => {
             if (valid) {
@@ -71,6 +71,22 @@ export default {
           this.query.pageNum = num
           this.getData()
         },
+          // 修改单个属性
+    changeProp(row, options) {
+      this.$prompt(options.tips, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValue: row[options.prop],
+        inputPattern: options.reg,
+        inputErrorMessage: options.errorMsg || '请输入内容'
+      }).then(async({ value }) => {
+        const res = await this.$http.put(`${options.url}/${row.id}/${options.prop}`, { value })
+        if (res) {
+          this.$notify.success('修改成功')
+          row[options.prop] = value
+        }
+      }).catch(() => {})
+    },
         handleClose(done) {
           this.$confirm('确认关闭？')
             .then(_ => {
