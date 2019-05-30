@@ -72,6 +72,10 @@ export default {
       formData:{
 
       },
+      query:{
+        filterType: 0,
+        searchString: ''
+      },
       rules: {
         //<!-- rules insert -->
       }
