@@ -26,13 +26,17 @@ export default {
 
     async get(url, params) {
       this.listLoading = true
-      const res = await this.$http.get(url, { params })
-      this.listLoading = false
-      if (res) {
+      try{
+        const res = await this.$http.get(url, { params })
+        this.listLoading = false
         console.log('res', res)
         this.list = res.rows
         this.total = res.count
+      }catch(e){
+        this.listLoading = false
+        console.log('getData error')
       }
+      
     },
 
     del(url) {
@@ -52,18 +56,24 @@ export default {
       // 默认表单ref=ruleForm
       this.$refs.ruleForm.validate(async(valid) => {
         if (valid) {
-          let res
-          if (this.isNew) {
-            res = await this.$http.post(url, data)
-            this.$message.success('添加成功')
-          } else {
-            res = await this.$http.put(url + '/' + data.id, data)
-            this.$message.success('修改成功')
+          
+          try{
+            let res
+            if (this.isNew) {
+              res = await this.$http.post(url, data)
+              this.$message.success('添加成功')
+            } else {
+              res = await this.$http.put(url + '/' + data.id, data)
+              this.$message.success('修改成功')
+            }
+           
+              this.addDialogVisible = false
+              this.getData()
+            
+          }catch{
+            console.log('submit error')
           }
-          if (res) {
-            this.addDialogVisible = false
-            this.getData()
-          }
+         
         } else {
           console.log('error submit!!')
           return false
