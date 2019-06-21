@@ -1,0 +1,42 @@
+{
+  "table": {
+    "id": {
+      "type": "string",
+      "description": "编号"
+    },
+    "type": {
+      "type": "string",
+      "description": "banner种类"
+    },
+    "img": {
+      "type": "string",
+      "description": "上传图片"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  },
+  "form": {
+    "id": {
+      "type": "string",
+      "description": "编号"
+    },
+    "type": {
+      "type": "string",
+      "description": "banner种类"
+    },
+    "img": {
+      "type": "string",
+      "description": "上传图片"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    },
+    "url": {
+      "type": "string",
+      "description": "URL"
+    }
+  }
+}

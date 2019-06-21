@@ -1,0 +1,27 @@
+{
+ 
+  "table": {
+    "id": {
+      "type": "integer",
+      "description": "部门编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "部门名称"
+    },
+    "tel": {
+      "type": "string",
+      "description": "部门人数(人)"
+    },
+    "department": {
+      "type": "string",
+      "description": "下设员工列表"
+    }
+  },
+  "form":{
+    "name": {
+      "type": "string",
+      "description": "部门名称"
+    }
+  }
+}

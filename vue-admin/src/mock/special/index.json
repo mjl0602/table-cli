@@ -1,0 +1,46 @@
+{
+  "table": {
+    "name": {
+      "type": "string",
+      "description": "专题名称"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    },
+    "introduction": {
+      "type": "string",
+      "description": "专题简介"
+    },
+    "id": {
+      "type": "string",
+      "description": "编号"
+    }
+  },
+  "form": {
+    "name": {
+      "type": "string",
+      "description": "专题名称"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    },
+    "courses": {
+      "type": "string",
+      "description": "专题课程"
+    },
+    "banners": {
+      "type": "string",
+      "description": "专题图片"
+    },
+    "introduction": {
+      "type": "string",
+      "description": "专题简介"
+    },
+    "id": {
+      "type": "string",
+      "description": "编号"
+    }
+  }
+}

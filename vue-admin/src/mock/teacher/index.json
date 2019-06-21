@@ -1,0 +1,66 @@
+{
+  "table": {
+    "id": {
+      "type": "integer",
+      "description": "老师编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "老师姓名"
+    },
+    "goodAtIndustry": {
+      "type": "string",
+      "description": "擅长行业"
+    },
+    "goodAtArea": {
+      "type": "string",
+      "description": "擅长领域"
+    },
+    "introduction": {
+      "type": "string",
+      "description": "老师简介"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  },
+  "form": {
+    "id": {
+      "type": "integer",
+      "description": "老师编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "老师姓名"
+    },
+    "goodAtIndustry": {
+      "type": "string",
+      "description": "擅长行业"
+    },
+    "goodAtArea": {
+      "type": "string",
+      "description": "擅长领域"
+    },
+    "avatar": {
+      "type": "string",
+      "description": "老师主页大图"
+    },
+    "banners": {
+      "type": "array",
+      "description": "老师列表图片"
+    },
+    "introduction": {
+      "type": "string",
+      "description": "老师简介"
+    },
+    "tel": {
+      "type": "string",
+      "description": "联系方式"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  }
+}

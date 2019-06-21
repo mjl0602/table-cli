@@ -1,0 +1,16 @@
+{
+  "table": {
+    "id": {
+      "type": "string",
+      "description": "问题编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "问题名称"
+    },
+    "user": {
+      "type": "object",
+      "description": "提问人"
+    }
+  }
+}

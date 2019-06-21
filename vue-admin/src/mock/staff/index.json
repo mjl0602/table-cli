@@ -1,0 +1,38 @@
+{
+  "table": {
+    "id": {
+      "type": "integer",
+      "description": "员工编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "员工姓名"
+    },
+    "tel": {
+      "type": "string",
+      "description": "员工手机号"
+    },
+    "department": {
+      "type": "string",
+      "description": "员工所属部门"
+    },
+    "credit": {
+      "type": "string",
+      "description": "累计学分"
+    }
+  },
+  "form": {
+    "name": {
+      "type": "string",
+      "description": "员工姓名"
+    },
+    "tel": {
+      "type": "string",
+      "description": "员工手机号"
+    },
+    "department": {
+      "type": "string",
+      "description": "员工所属部门"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "table": {
+    "id": {
+      "type": "string",
+      "description": "测评编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "测评名称"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  },
+  "form":{
+    "name": {
+      "type": "string",
+      "description": "测评名称"
+
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  }
+}

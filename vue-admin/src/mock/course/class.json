@@ -1,0 +1,30 @@
+{
+  "table": {
+    "id": {
+      "type": "number",
+      "description": "编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "分类名称"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  },
+  "form": {
+    "id": {
+      "type": "number",
+      "description": "编号"
+    },
+    "name": {
+      "type": "string",
+      "description": "分类名称"
+    },
+    "index": {
+      "type": "string",
+      "description": "排序"
+    }
+  }
+}
