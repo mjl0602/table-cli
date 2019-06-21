@@ -1,5 +1,28 @@
 const fs = require('fs');
 const path = require('path');
+let router = ''
+const reg = /\/\/[\s\S]*生成路由开始([\s\S]*)(.*)([\s\S]*)\/\/[\s\S]*生成路由结束/
+// // 路由
+async function readRouter(){
+    let path = resolvePath('../template/router.js')
+    let data = await readfile(path)
+    return data
+}
+// 路由父组件
+async function readFatherRouter(){
+    let path = resolvePath('../template/routerFather.js')
+    let data = await readfile(path)
+    return data
+}
+// 路由子组件
+async function readChildRouter(){
+    let path = resolvePath('../template/routerChild.js')
+    let data = await readfile(path)
+    return data
+}
+
+
+
 // 解析路径
 function resolvePath(url){
     return path.join(__dirname,url);
@@ -10,12 +33,7 @@ async function readMixin(){
     let data = await readfile(path)
     return data
 }
-// 读取 私有mixins
-async function readPrivateMixin(){
-    let path = resolvePath('../template/mixin_per.js')
-    let data = await readfile(path)
-    return data
-}
+
 // 读取初始模板
 async function readIndex(){
     let path = resolvePath('../template/index.vue')
@@ -50,7 +68,7 @@ function readfile(path){
         // utf8 读取出的的是string 不加读取的是数据流--buffer
             fs.readFile(path, "utf8", function (err, data) {
             if (err) {
-                console.error(err);
+                console.error('o(╯□╰)o---1');
                 reject(err)
             }
             resolve(data)
@@ -62,7 +80,7 @@ function savefile(path,data){
     return new Promise((resolve,reject)=>{
         fs.writeFile(path,data, function (err, data) {
             if (err) {
-                console.error(err);
+                console.error('o(╯□╰)o---2');
                 reject(err)
             }
             resolve(data)
@@ -83,21 +101,11 @@ function savefile(path,data){
     
 } 
 async function jsontohtml({json,path,target,type,topPath}){
-    // var json_files = files.filter((f)=>{
-    //     return f.endsWith('.json');
-    // });
-    // let commonMixin = await readMixin()
-    // // mkdir(resolvePath(`../../${target}/src`))
-    // // mkdir(resolvePath(`../../${target}/src/views`))
-    // // mkdir(resolvePath(`../../${target}/src/views/mixins`))
-    // // savefile(resolvePath(`../../${target}/src/views/mixins/index.js`),commonMixin); // 公共mixin  
-    // mkdir(`${target}/src`)
-    // mkdir(`${target}/src/views`)
-    // let result = mkdir(`${target}/src/views/mixins`)
-    // if(!fs.existsSync(`${target}/src/views/mixins/index.js`)){  
-    //     savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
-    // }
-
+  
+    let routerChild = await readChildRouter();
+    let routerFather = await readFatherRouter();
+    let childData = ''
+    let fatherData = ''
     for(var f of json){
         var requirePath = topPath?`${path}/${topPath}/${f}`:`${path}/${f}`
         let jsonObj = require(requirePath);
@@ -134,27 +142,31 @@ async function jsontohtml({json,path,target,type,topPath}){
                             // .replace(/@per@/g,`${per_fileName}Mixin`)
                             .replace(/\/\/<!-- formData insert -->/,defaultForm)
                             .replace(/\/\/<!-- rules insert -->/,defaultRules)
-        
         if(type === 'file'){
             produce = produce.replace(/@f@/g,`${per_fileName}Mixin`)
             mkdir(`${target}/src/views/${per_fileName}`);
             if(!fs.existsSync(`${target}/src/views/${per_fileName}/index.vue`)){  
                 savefile(`${target}/src/views/${per_fileName}/index.vue`,produce); // 模板生成 
-            // savefile(`${target}/src/views/mixins/${per_fileName}Mixin.js`,perMixin);
+                
             }
         }else{
-            produce = produce.replace(/@f@/g,`${topPath}/${per_fileName}Mixin`)
+           
             // savefile(`${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`,perMixin);
+            childData += routerChild + '\n'
+            childData = childData.replace(/ChildPath/,`'${per_fileName}'`)
+                                .replace('UniquePath',`'${topPath}_${per_fileName}'`)
+                                .replace('/FatherPath/ChildPath',`/${topPath}/${per_fileName}`)
             if(!fs.existsSync(`${target}/src/views/${topPath}/${per_fileName}.vue`)){  
                 savefile(`${target}/src/views/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
             }
         }
-         
-
     }
+    let routerData = routerFather.replace('FatherPath',`'/${topPath}'`).replace('uniqueChild',childData)
+    router += routerData + '\n'
 }
 // 读取模板
-async function createfile(path,target='example'){
+async function createfile(path,target){
+    
     var files = fs.readdirSync(path);// 读取目录下所有json文件
     if(files.length<1){
         console.log('该文件夹为空')
@@ -170,15 +182,23 @@ async function createfile(path,target='example'){
     mkdir(`${target}`)
     mkdir(`${target}/src`)
     mkdir(`${target}/src/views`)
-    mkdir(`${target}/src/views/mixins`)
-    if(!fs.existsSync(`${target}/src/views/mixins/index.js`)){  
-        savefile(`${target}/src/views/mixins/index.js`,commonMixin); // 公共mixin  
+    mkdir(`${target}/src/mixins`)
+    mkdir(`${target}/src/router`)
+    let Router 
+    try{
+        Router =  await readfile(`${target}/src/router/index.js`)
+    }catch{
+        Router = await readRouter()
+    }
+    console.log(Router)
+    if(!fs.existsSync(`${target}/src/mixins/auto_mixin.js`)){  
+        savefile(`${target}/src/mixins/auto_mixin.js`,commonMixin); // 公共mixin  
     }
     var json_files = files.filter((f)=>{
         return f.endsWith('.json');
     });
     if(json_files.length>0){
-        jsontohtml({
+        await jsontohtml({
             json:json_files,
             path,
             target,
@@ -199,7 +219,7 @@ async function createfile(path,target='example'){
                 console.log(data_files,'`````')
                
                 if(data_files.length>0){
-                    jsontohtml({
+                    await jsontohtml({
                         json:data_files,
                         path,
                         target,
@@ -216,7 +236,14 @@ async function createfile(path,target='example'){
         console.log('该文件不存在！！！')
         return 
     }
+    let aimData = reg.exec(Router)[1]
+    console.log('===>',aimData)
+    let data = Router.replace(aimData,'\n'+router+'\n')
+    savefile(`${target}/src/router/index.js`,data)
+    console.log('写入路由完成')
 }
+
+
 
 module.exports = {
     createfile

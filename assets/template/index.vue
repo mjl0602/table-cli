@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-   <el-header>
+   <el-header class='head'>
      <el-button type="primary" @click="addData">
       新增
     </el-button>
    </el-header>
-    <el-main>
+    <el-main class='body'>
       <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
       <el-table-column align="center" label="ID" min-width="100">
         <template slot-scope="scope">
@@ -28,7 +28,7 @@
       </el-table-column>
     </el-table>
     </el-main>
-    <el-footer>
+    <el-footer class='foot'>
       <el-pagination
       :current-page="query.pageNum"
       :page-sizes="[10, 20, 30, 50]"
@@ -61,7 +61,7 @@
   </div>
 </template>
 <script>
-import Main from '../mixins'
+import Main from '@/mixins/auto_mixin'
 export default {
   mixins:[Main],
   data(){

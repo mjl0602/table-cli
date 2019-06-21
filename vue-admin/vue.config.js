@@ -7,7 +7,7 @@ function resolve(dir) {
 
 // TODO: change to Settings
 const port = 9527
-const name = '课程'
+const name = '测试项目'
 
 // Explanation of each configuration item You can find it in https://cli.vuejs.org/config/
 module.exports = {
@@ -33,9 +33,9 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        // target: 'http://yapi.deepmedical.net.cn/mock/267/api/',
+        target: 'https://yapi.deepmedical.net.cn/mock/267/api/',
         // target: 'https://test.deepmedical.net.cn/baishan/api/', // 测试服务器
-        target: 'http://192.168.50.4:7011/api/',
+        // target: 'http://192.168.50.4:7011/api/',
         changeOrigin: true,
         secure: true,
         ws: false, // 需要socket时启用
