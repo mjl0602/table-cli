@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -8,6 +7,10 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
+import componentsRouter from './modules/components'
+import chartsRouter from './modules/charts'
+import tableRouter from './modules/table'
+import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -89,61 +92,46 @@ export const constantRoutes = [
 export const asyncRoutes = [
 
   /** when your routing map is too long, you can split it into small modules **/
-
+  
   // 生成路由开始
-  {
+{
+    path: '/undefined',
+    component: Layout,
+    meta: {
+      title: "Example",
+      icon: "example",
+      roles: ["admin"]
+    },
+    children: [
+      
+    ]
+  },
+{
     path: '/example',
     component: Layout,
     meta: {
-      title: 'Example',
-      icon: 'example',
-      roles: ['admin']
+      title: "Example",
+      icon: "example",
+      roles: ["admin"]
     },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/example/index'),
-        name: 'example_index',
-        meta: { 'title': 'Create Article', 'icon': 'edit' }
-      },
-      {
-        path: 'user',
-        component: () => import('@/views/example/user'),
-        name: 'example_user',
-        meta: { 'title': 'Create Article', 'icon': 'edit' }
-      }
-
-    ]
-  },
-  {
-    path: '/mjl',
-    component: Layout,
-    meta: {
-      title: 'Example',
-      icon: 'example',
-      roles: ['admin']
-    },
-    children: [
-      {
-        path: 'daxia',
-        component: () => import('@/views/mjl/daxia'),
-        name: 'mjl_daxia',
-        meta: { 'title': 'Create Article', 'icon': 'edit' }
-      },
-      {
-        path: 'user',
-        component: () => import('@/views/mjl/user'),
-        name: 'mjl_user',
-        meta: { 'title': 'Create Article', 'icon': 'edit' }
-      }
+  path: 'demo_user',
+  component: () => import("@/views/example/demo_user"),
+  name: 'example_demo_user',
+  meta: { "title": "Create Article", "icon": "edit" }
+},
+{
+  path: 'index',
+  component: () => import("@/views/example/index"),
+  name: 'example_index',
+  meta: { "title": "Create Article", "icon": "edit" }
+},
 
     ]
   },
 
-  // 生成路由结束
-  {
-    path: '401', redirect: '/404', hidden: true
-  },
+// 生成路由结束
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
@@ -163,4 +151,3 @@ export function resetRouter() {
 }
 
 export default router
-
