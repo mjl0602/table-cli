@@ -304,6 +304,23 @@ export function debounce(func, wait, immediate) {
 export function uniqueArr(arr) {
   return Array.from(new Set(arr))
 }
+// 对象数组去重 通过json.stringify判读对象是否一样
+export function uniqObjInArray(objarray) {
+  const len = objarray.length
+  const tempJson = {
+
+  }
+  const res = []
+  for (let i = 0; i < len; i++) {
+    // 取出每一个对象
+    tempJson[JSON.stringify(objarray[i])] = true
+  }
+  const keyItems = Object.keys(tempJson)
+  for (let j = 0; j < keyItems.length; j++) {
+    res.push(JSON.parse(keyItems[j]))
+  }
+  return res
+}
 
 export function createUniqueString() {
   const timestamp = +new Date() + ''
@@ -366,8 +383,6 @@ export function clearDeep(param) {
     for (var i = 0; i < param.length; i++) {
       if (belong(param[i]) === 'Object' || belong(param[i]) === 'Array') {
         obj[i] = clearDeep(param[i])
-      } else {
-        obj[i] = ''
       }
     }
   } else {

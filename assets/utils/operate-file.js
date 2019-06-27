@@ -92,11 +92,11 @@ function savefile(path,data){
   function mkdir(path){
     console.log('path',path)
     if(fs.existsSync(path)){
-        console.log(path + '已存在')
-        
+        // console.log(path + '已存在')
+
     }else{
         fs.mkdirSync(path)
-        console.log(path + ' 创建成功')
+        // console.log(path + ' 创建成功')
     }
     
 } 
@@ -105,7 +105,8 @@ async function jsontohtml({json,path,target,type,topPath}){
     let routerChild = await readChildRouter();
     let routerFather = await readFatherRouter();
     let childData = ''
-    let fatherData = ''
+    // let fatherData = ''
+    let routerData = ''
     for(var f of json){
         var requirePath = topPath?`${path}/${topPath}/${f}`:`${path}/${f}`
         let jsonObj = require(requirePath);
@@ -143,26 +144,40 @@ async function jsontohtml({json,path,target,type,topPath}){
                             .replace(/\/\/<!-- formData insert -->/,defaultForm)
                             .replace(/\/\/<!-- rules insert -->/,defaultRules)
         if(type === 'file'){
+           
+            childData += routerChild + '\n'
+            childData = childData.replace(/ChildPath/,`'index'`)
+                                .replace('UniquePath',`'${per_fileName}_index'`)
+                                .replace('/FatherPath/ChildPath',`/${per_fileName}/index`)
+                               
+            routerData = routerFather.replace('FatherPath',`'/${per_fileName}'`).replace('uniqueChild',childData)
+            // console.log(`'/${per_fileName}'`,routerData)
             produce = produce.replace(/@f@/g,`${per_fileName}Mixin`)
-            mkdir(`${target}/src/views/${per_fileName}`);
-            if(!fs.existsSync(`${target}/src/views/${per_fileName}/index.vue`)){  
-                savefile(`${target}/src/views/${per_fileName}/index.vue`,produce); // 模板生成 
+            mkdir(`${target}/src/views/yp-auto/${per_fileName}`);
+            if(!fs.existsSync(`${target}/src/views/yp-auto/${per_fileName}/index.vue`)){  
+                savefile(`${target}/src/views/yp-auto/${per_fileName}/index.vue`,produce); // 模板生成 
                 
             }
         }else{
-           
             // savefile(`${target}/src/views/mixins/${topPath}/${per_fileName}Mixin.js`,perMixin);
             childData += routerChild + '\n'
             childData = childData.replace(/ChildPath/,`'${per_fileName}'`)
                                 .replace('UniquePath',`'${topPath}_${per_fileName}'`)
                                 .replace('/FatherPath/ChildPath',`/${topPath}/${per_fileName}`)
-            if(!fs.existsSync(`${target}/src/views/${topPath}/${per_fileName}.vue`)){  
-                savefile(`${target}/src/views/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
+            if(!fs.existsSync(`${target}/src/views/yp-auto/${topPath}/${per_fileName}.vue`)){  
+                savefile(`${target}/src/views/yp-auto/${topPath}/${per_fileName}.vue`,produce); // 模板生成 
             }
         }
     }
-    let routerData = routerFather.replace('FatherPath',`'/${topPath}'`).replace('uniqueChild',childData)
+    
+    
+    if(type !== 'file'){
+        routerData = routerFather.replace('FatherPath',`'/${topPath}'`).replace('uniqueChild',childData)
+    }
+    
+
     router += routerData + '\n'
+    
 }
 // 读取模板
 async function createfile(path,target){
@@ -184,13 +199,22 @@ async function createfile(path,target){
     mkdir(`${target}/src/views`)
     mkdir(`${target}/src/mixins`)
     mkdir(`${target}/src/router`)
+    mkdir(`${target}/src/views/yp-auto`);
     let Router 
+    let aimData
     try{
         Router =  await readfile(`${target}/src/router/index.js`)
     }catch{
         Router = await readRouter()
     }
-    console.log(Router)
+     try{
+        aimData = reg.exec(Router)[1]
+     }catch{
+         console.log('请设置路由生成位置')
+         return
+     }
+
+
     if(!fs.existsSync(`${target}/src/mixins/auto_mixin.js`)){  
         savefile(`${target}/src/mixins/auto_mixin.js`,commonMixin); // 公共mixin  
     }
@@ -211,7 +235,7 @@ async function createfile(path,target){
              
             if(res.isDirectory()){
                 var datafiles = fs.readdirSync(path+'/'+files[i]);
-                mkdir(`${target}/src/views/${files[i]}`)
+                mkdir(`${target}/src/views/yp-auto/${files[i]}`)
                 // mkdir(`${target}/src/views/mixins/${files[i]}`)
                 var data_files = datafiles.filter((f)=>{
                     return f.endsWith('.json');
@@ -236,8 +260,7 @@ async function createfile(path,target){
         console.log('该文件不存在！！！')
         return 
     }
-    let aimData = reg.exec(Router)[1]
-    console.log('===>',aimData)
+    
     let data = Router.replace(aimData,'\n'+router+'\n')
     savefile(`${target}/src/router/index.js`,data)
     console.log('写入路由完成')
