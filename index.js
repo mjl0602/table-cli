@@ -28,35 +28,39 @@ async function main(args) {
     console.log("正在通过指定JSON文件创建");
     build(args[3]);
     return;
+  }else if (args[2] == "bmob") {
+    console.log("正在通过指定JSON文件创建");
+    build(args[3],true);
+    return;
   }
   console.log("没找到对应指令", args[2]);
 }
 
 // build入口
-async function build(command) {
+async function build(command,bmob = false) {
   if (command == "all") {
     console.log("读取目录下所有文件\n");
-    buildAll();
+    buildAll(bmob);
   } else {
-    buildFileName(command);
+    buildFileName(command,bmob);
   }
 }
 
 // build全部文件
-async function buildAll(buildFunction = build) {
+async function buildAll(bmob = false) {
   let pathList = find(`${srcPath}/${source_path}/`);
   for (const filePath of pathList) {
-    await buildFilePath(filePath);
+    await buildFilePath(filePath, bmob);
   }
   console.log("全部创建完成");
 }
 
-async function buildFileName(fileName) {
+async function buildFileName(fileName,bmob = false) {
   fileName = fileName.replace(".json", "");
-  await buildFilePath(`${srcPath}/${source_path}/${fileName}.json`);
+  await buildFilePath(`${srcPath}/${source_path}/${fileName}.json`,bmob);
 }
 
-async function buildFilePath(filePath) {
+async function buildFilePath(filePath, bmob) {
   let fileName = filePath.substring(
     filePath.lastIndexOf("/") + 1,
     filePath.length,
@@ -75,12 +79,18 @@ async function buildFilePath(filePath) {
   let defaultObject = "";
   let rules = "";
 
+
+  // bmob only
+  let edit = '';
+
+
   for (const key in tempObject) {
     if (tempObject.hasOwnProperty(key)) {
       const element = tempObject[key];
       // 页面表格与表单
       table += await row(key, element);
       form += await input(key, element);
+      edit += `    res.set("${key}", obj.${key})\n`
       // 数据类和表单规则
       defaultObject += `${key}:"",\n    `;
       rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
@@ -98,12 +108,23 @@ async function buildFilePath(filePath) {
   await savefile(`${srcPath}/${pages_path}/${fileName}Manage.vue`, pageTemplate);
 
   // 示例
-  let exampleObjectTemp = await file(`${__dirname}/assets/exampleAdmin.js`);
+  let examPath = `${__dirname}/assets/exampleAdmin.js`;
+  if (bmob) {
+    examPath = `${__dirname}/assets/bmobExampleAdmin.js`;
+  }
+  let exampleObjectTemp = await file(examPath);
   exampleObjectTemp = exampleObjectTemp.replace(
     "/** property */",
     defaultObject,
   );
   exampleObjectTemp = exampleObjectTemp.replace("/** rules */", rules);
+
+  if (bmob) {
+    exampleObjectTemp = exampleObjectTemp.replace("/** edit */", edit);
+    exampleObjectTemp = exampleObjectTemp.replace("/** add */", edit);
+    exampleObjectTemp = exampleObjectTemp.replace("##tableName##", fileName);
+  }
+
   await mkdir(`src/${api_path}/`);
   await savefile(`${srcPath}/${api_path}/${fileName}.js`, exampleObjectTemp);
 
