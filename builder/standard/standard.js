@@ -1,6 +1,6 @@
-const { file, find, savefile, mkdir } = require("../tools/file");
+const { file, find, savefile, mkdir } = require("../../tools/file");
 
-const { row, input } = require("../tools/builder");
+const { row, input } = require("../../tools/builder");
 let pages_path = "table-pages";
 let api_path = "table-api";
 let source_path = "table-source";
@@ -18,8 +18,7 @@ async function build(command) {
   }
   if (command == "all") {
     console.log("读取目录下所有文件\n");
-
-     await buildAll();
+    await buildAll();
   } else {
     await buildFileName(command);
   }
@@ -34,11 +33,22 @@ async function buildAll(buildFunction = build) {
   console.log("全部创建完成");
 }
 
+
+
+/**
+ * 通过文件名来创建相关的表格
+ * @param {String} fileName - json文件名，会通过该json来生成
+ */
 async function buildFileName(fileName) {
   fileName = fileName.replace(".json", "");
   await buildFilePath(`${srcPath}/${source_path}/${fileName}.json`);
 }
 
+
+/**
+ * 通过文件路径来创建相关的表格
+ * @param {String} filePath - json文件名，会通过该json来生成
+ */
 async function buildFilePath(filePath) {
   let fileName = filePath.substring(
     filePath.lastIndexOf("/") + 1,
@@ -83,7 +93,7 @@ async function buildFilePath(filePath) {
     pageTemplate,
   );
 
-  // 示例
+  // 写入示例信息
   let exampleObjectTemp = await file(`${assetsPath}/exampleAdmin.js`);
   exampleObjectTemp = exampleObjectTemp.replace(
     "/** property */",
@@ -96,8 +106,11 @@ async function buildFilePath(filePath) {
   console.log("保存文件完成\n");
   return;
 }
-
-async function init(jspath) {
+/**
+ * init功能，可以创建用于示例的文件夹
+ * 
+ */
+async function init() {
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
   await mkdir(`src/${api_path}`);
@@ -118,7 +131,7 @@ async function init(jspath) {
   await mkdir(`src/${api_path}/`);
   await savefile(`${srcPath}/${api_path}/adminobject.js`, adminObjectTemp);
 
-  console.log("创建example");
+  console.log("创建example.json");
   // 创建example
   let exampleArticle = await file(`${assetsPath}/example_article.json`);
   await mkdir(`src/${source_path}`);
@@ -126,7 +139,7 @@ async function init(jspath) {
     `${srcPath}/${source_path}/example_article.json`,
     exampleArticle,
   );
-
+  // build一次example
   await build("example_article");
   console.log("init 完成");
 }

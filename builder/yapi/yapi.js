@@ -1,6 +1,6 @@
-const { file, find, savefile, mkdir } = require("../tools/file");
+const { file, find, savefile, mkdir } = require("../../tools/file");
 
-const { row, input } = require("../tools/builder");
+const { row, input } = require("../../tools/builder");
 let pages_path = "table-pages";
 let api_path = "table-api";
 let source_path = "table-source";
