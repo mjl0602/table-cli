@@ -4,30 +4,41 @@
 const { file, find, savefile, mkdir } = require("./tools/file");
 
 const { row, input } = require("./tools/builder");
+let pages_path = "table-pages";
+let api_path = "table-api";
+let source_path = "table-source";
 
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
-let pages_path = "table-pages";
-let api_path = "table-api";
-let source_path = "table-source";
+// 标准
+const standard = require("./builder/standard");
+// Yapi
+const yapi = require("./builder/yapi");
+// TODO: Bmob
+// const { bmob_build, bmob_init } = require("./builder/bmob");
 
 main(process.argv);
 
 async function main(args) {
   console.log("args", args);
-
   if (!args[2]) {
     console.log("必须指定来源文件，命令格式：table-cli build index.js");
     return;
   } else if (args[2] == "init") {
     console.log("初始化项目");
-    init(args[2]);
+    standard.init(args[2]);
     return;
   } else if (args[2] == "build") {
     console.log("正在通过指定JSON文件创建");
-    build(args[3]);
+    try {
+      await standard.build(args[3]);
+    } catch (error) {
+      console.log(error);
+      console.log("\n\nbuild发生错误，是否忘记init?\n");
+    }
     return;
+<<<<<<< HEAD
   }else if (args[2] == "bmob") {
     console.log("正在通过指定JSON文件创建");
     build(args[3],true);
@@ -94,8 +105,21 @@ async function buildFilePath(filePath, bmob) {
       // 数据类和表单规则
       defaultObject += `${key}:"",\n    `;
       rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
+=======
+  } else if (args[2] == "yp-init") {
+    yapi.init(args[3]);
+    return;
+  } else if (args[2] == "yp-build") {
+    try {
+      await yapi.build(args[3]);
+    } catch (error) {
+      console.log(error);
+      console.log("\n\nbuild发生错误，是否忘记init?\n");
+>>>>>>> 5f867a6f0dbb016322af8f2fa03629c186d6e393
     }
+    return;
   }
+<<<<<<< HEAD
 
   // 创建页面
   let pageTemplate = await file(`${__dirname}/assets/template.vue`);
@@ -158,4 +182,7 @@ async function init(jspath) {
 
   await build("example_article");
   console.log("init 完成");
+=======
+  console.log("没找到对应指令", args[2]);
+>>>>>>> 5f867a6f0dbb016322af8f2fa03629c186d6e393
 }
