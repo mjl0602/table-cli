@@ -5,13 +5,13 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 exports.row = async function(property, label) {
-  let temp = await file(resolve("../assets/text_column.html"));
+  let temp = await file(resolve("../public/text_column.html"));
   // console.log(temp);
   return temp.replace(/###/g, property).replace(/@@@/g, label);
 };
 
 exports.input = async function(property, label) {
-  let temp = await file(resolve("../assets/text_form.html"));
+  let temp = await file(resolve("../public/text_form.html"));
   // console.log(temp);
   return temp.replace(/###/g, property).replace(/@@@/g, label);
 };

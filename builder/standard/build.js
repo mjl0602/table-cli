@@ -1,14 +1,21 @@
 const { file, find, savefile, mkdir } = require("../../tools/file");
 
 const { row, input } = require("../../tools/builder");
+
 let pages_path = "table-pages";
-let api_path = "table-api";
+// let api_path = "table-api";
 let source_path = "table-source";
 
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
-let assetsPath = `${__dirname}/../assets`;
+// let assetsPath = `${__dirname}/../../public`;
+
+function assetsPath() {
+  let path = `${__dirname}/../../public`;
+  console.log(path);
+  return path;
+}
 
 // build入口
 async function build(command) {
@@ -32,8 +39,6 @@ async function buildAll(buildFunction = build) {
   }
   console.log("全部创建完成");
 }
-
-
 
 /**
  * 通过文件名来创建相关的表格
@@ -79,30 +84,22 @@ async function buildFilePath(filePath) {
       rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
     }
   }
-
   // 创建页面
-  let pageTemplate = await file(`${assetsPath}/template.vue`);
+  let pageTemplate = await file(`${__dirname}/assets/template.vue`);
   pageTemplate = pageTemplate.replace("<!-- table insert -->", table);
   pageTemplate = pageTemplate.replace("<!-- form insert -->", form);
   pageTemplate = pageTemplate.replace(/##filename##/g, fileName);
-
+  pageTemplate = pageTemplate.replace(
+    "/** property */",
+    defaultObject,
+  );
+  pageTemplate = pageTemplate.replace("/** rules */", rules);
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
   await savefile(
     `${srcPath}/${pages_path}/${fileName}Manage.vue`,
     pageTemplate,
   );
-
-  // 写入示例信息
-  let exampleObjectTemp = await file(`${assetsPath}/exampleAdmin.js`);
-  exampleObjectTemp = exampleObjectTemp.replace(
-    "/** property */",
-    defaultObject,
-  );
-  exampleObjectTemp = exampleObjectTemp.replace("/** rules */", rules);
-  await mkdir(`src/${api_path}/`);
-  await savefile(`${srcPath}/${api_path}/${fileName}.js`, exampleObjectTemp);
-
   console.log("保存文件完成\n");
   return;
 }
@@ -113,34 +110,31 @@ async function buildFilePath(filePath) {
 async function init() {
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
-  await mkdir(`src/${api_path}`);
+  // await mkdir(`src/${api_path}`);
   await mkdir(`src/${source_path}`);
 
-  console.log("创建mixin");
+  console.log("创建basic部分");
   // 创建mixin
-  let mixinTemplate = await file(`${assetsPath}/admin_mixin.js`);
-  await mkdir(`src/${pages_path}/mixin`);
+  let mixinTemplate = await file(`${assetsPath()}/admin_mixin.js`);
+  await mkdir(`src/${pages_path}/basic`);
   await savefile(
-    `${srcPath}/${pages_path}/mixin/admin_mixin.js`,
+    `${srcPath}/${pages_path}/basic/admin_mixin.js`,
     mixinTemplate,
   );
-
-  console.log("创建数据类父类");
   // 父类
-  let adminObjectTemp = await file(`${assetsPath}/adminobject.js`);
-  await mkdir(`src/${api_path}/`);
-  await savefile(`${srcPath}/${api_path}/adminobject.js`, adminObjectTemp);
+  let adminObjectTemp = await file(`${assetsPath()}/adminobject.js`);
+  await savefile(`src/${pages_path}/basic/adminobject.js`, adminObjectTemp);
 
   console.log("创建example.json");
   // 创建example
-  let exampleArticle = await file(`${assetsPath}/example_article.json`);
+  let exampleArticle = await file(`${__dirname}/test/article.json`);
   await mkdir(`src/${source_path}`);
   await savefile(
-    `${srcPath}/${source_path}/example_article.json`,
+    `${srcPath}/${source_path}/article.json`,
     exampleArticle,
   );
   // build一次example
-  await build("example_article");
+  await build("article");
   console.log("init 完成");
 }
 module.exports = {
