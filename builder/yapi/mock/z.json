@@ -1,0 +1,16 @@
+{
+  "table":{
+    "name": {
+      "type": "string",
+      "description": "医生姓名"
+    },
+    "tel": {
+      "type": "string",
+      "description": "医生电话"
+    },
+    "tel2": {
+      "type": "string",
+      "description": "医生电话"
+    }
+  }
+}
