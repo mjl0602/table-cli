@@ -152,7 +152,6 @@ async function jsontohtml({json,path,target,type,topPath}){
             console.log('per_fileName',per_fileName)                  
             routerData = routerFather.replace('FatherPath',`'/${per_fileName}'`).replace('uniqueChild',childData)
             router += routerData + '\n'
-            
             // console.log(`'/${per_fileName}'`,routerData)
             produce = produce.replace(/@f@/g,`${per_fileName}Mixin`)
             mkdir(`${target}/src/views/yp-auto/${per_fileName}`);
@@ -176,7 +175,6 @@ async function jsontohtml({json,path,target,type,topPath}){
     if(type !== 'file'){
         routerData = routerFather.replace('FatherPath',`'/${topPath}'`).replace('uniqueChild',childData)
         router += routerData + '\n'
-
     }
     
 
@@ -208,12 +206,12 @@ async function createfile(path,target){
     let aimData
     try{
         Router =  await readfile(`${target}/src/router/index.js`)
-    }catch{
+    }catch(e){
         Router = await readRouter()
     }
      try{
         aimData = reg.exec(Router)[1]
-     }catch{
+     }catch(e){
          console.log('请设置路由生成位置')
          return
      }
@@ -260,7 +258,7 @@ async function createfile(path,target){
             
  
         }
-    }catch{
+    }catch(e){
         console.log('该文件不存在！！！')
         return 
     }
