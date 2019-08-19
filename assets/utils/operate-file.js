@@ -130,7 +130,7 @@ async function jsontohtml({json,path,target,type,topPath}){
                 let res = data.replace(/@@@/g,jsonObj.form[key]['description']).replace(/###/g,key);
                 form_html += res  
                 defaultForm += `${key}: '', \n  `
-                defaultRules += `${key}:[{ required: true, message: "请输入${jsonObj.form[key]['description']}", trigger: "blur" }], \n`
+                defaultRules += `${key}:[{ required: false, message: "请输入${jsonObj.form[key]['description']}", trigger: "blur" }], \n`
             }
         }
         let per_fileName = f.split('.')[0]
