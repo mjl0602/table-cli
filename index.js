@@ -33,6 +33,18 @@ async function main(args) {
       console.log("\n\nbuild发生错误，是否忘记init?\n");
     }
     return;
+  } else if (args[2] == "addrouter") {
+    /**
+     * 普通 build
+     */
+    console.log("添加路由");
+    try {
+      await standard.addRouter();
+    } catch (error) {
+      console.log(error);
+      console.log("\n\nbuild发生错误，是否忘记init?\n");
+    }
+    return;
   } else if (args[2] == "yp-init") {
     /**
      * YAPI init

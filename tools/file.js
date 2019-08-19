@@ -45,6 +45,11 @@ function savefile(path, content) {
   });
 }
 
+function exists(path) {
+  console.log("保存文件", path);
+  return fs.existsSync(path);
+}
+
 function mkdir(path) {
   return new Promise((r, e) => {
     fs.mkdir(path, async function(err) {
@@ -57,5 +62,6 @@ module.exports = {
   find,
   file,
   savefile,
+  exists,
   mkdir,
 };
