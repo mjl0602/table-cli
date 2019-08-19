@@ -4,6 +4,8 @@ const { file, find, savefile, mkdir, exists } = require("../../tools/file");
 // 模板字符
 const { row, input } = require("../../tools/builder");
 
+
+
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 

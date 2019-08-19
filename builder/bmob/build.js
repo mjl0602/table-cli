@@ -4,6 +4,8 @@ const { file, find, savefile, mkdir, exists } = require("../../tools/file");
 // 模板字符
 const { row, input, date } = require("../../tools/builder");
 
+const { loadZhValue } = require("./tr");
+
 const Bmob = require("hydrogen-js-sdk");
 
 let pages_path = "table-pages";
@@ -28,7 +30,6 @@ async function config() {
     config = require(`${process.cwd()}/table-cli-config.json`);
   } else {
     console.log("创建一个默认config");
-    config = require("./assets/table-cli-config.json");
     let configContent = await file(`${assetsPath()}/table-cli-config.json`);
     await savefile(`${process.cwd()}/table-cli-config.json`, configContent);
   }
@@ -97,11 +98,12 @@ async function table() {
       //TODO: 考虑数据类型不是String的情况
       target[key] = key;
     }
+    target = await loadZhValue(target);
     await mkdir(`${srcPath}`);
     await mkdir(`${srcPath}/${source_path}`);
     await savefile(
       `${srcPath}/${source_path}/${tableName}.json`,
-      JSON.stringify(target,null,2),
+      JSON.stringify(target, null, 2),
     );
   }
 }
