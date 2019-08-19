@@ -8,10 +8,19 @@ let source_path = "table-source";
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
-function config() {
-  if (exists(`${execPath}/cli-config.json`)) {
-    return require(`${execPath}/cli-config.json`);
-  }
+// let config = {
+//   url: { pagesName: "table-pages", sourceName: "table-source" },
+// };
+
+// function config() {
+//   if (exists(`${execPath}/cli-config.json`)) {
+//     return require(`${execPath}/cli-config.json`);
+//   }
+// }
+
+function config(pages_path0, source_path0) {
+  pages_path = pages_path0;
+  source_path = source_path0;
 }
 
 function assetsPath() {
@@ -67,7 +76,7 @@ async function build(command) {
 }
 
 // build全部文件
-async function buildAll(buildFunction = build) {
+async function buildAll() {
   let pathList = find(`${srcPath}/${source_path}/`);
   for (const filePath of pathList) {
     await buildFilePath(filePath);
@@ -168,6 +177,7 @@ async function addRouter() {
   console.log(routeTemplate);
   await savefile(`${srcPath}/router/index.js`, routeTemplate);
 }
+
 module.exports = {
   build,
   buildAll,
@@ -175,4 +185,5 @@ module.exports = {
   buildFilePath,
   addRouter,
   init,
+  config,
 };

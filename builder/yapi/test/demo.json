@@ -10,5 +10,5 @@
   "tel": {
     "type": "string",
     "description": "医生电话"
-  } 
+  }
 }

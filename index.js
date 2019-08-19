@@ -10,6 +10,8 @@ const yapi = require("./builder/yapi/build");
 main(process.argv);
 
 async function main(args) {
+  // 读取config
+  
   console.log("args", args);
   if (!args[2]) {
     console.log("必须指定来源文件，命令格式：table-cli build index.js");
@@ -19,6 +21,7 @@ async function main(args) {
      * 普通 init
      */
     console.log("初始化项目");
+    standard.config("niubi", "niubi-source");
     standard.init(args[2]);
     return;
   } else if (args[2] == "build") {
