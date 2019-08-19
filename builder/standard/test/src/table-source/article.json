@@ -1,0 +1,13 @@
+{
+  "title": "标题",
+  "content": "内容",
+  "readCount": "阅读数",
+  "name": {
+    "type": "string",
+    "description": "医生姓名"
+  },
+  "tel": {
+    "type": "string",
+    "description": "医生电话"
+  }
+}

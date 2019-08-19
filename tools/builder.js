@@ -15,4 +15,9 @@ exports.input = async function(property, label) {
   // console.log(temp);
   return temp.replace(/###/g, property).replace(/@@@/g, label);
 };
+exports.date = async function(property, label) {
+  let temp = await file(resolve("../public/date_form.html"));
+  // console.log(temp);
+  return temp.replace(/###/g, property).replace(/@@@/g, label);
+};
 module.exports = exports;

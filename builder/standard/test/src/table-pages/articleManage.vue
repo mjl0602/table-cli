@@ -15,7 +15,32 @@
       <el-table-column label="id" align="center">
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
-      <!-- table insert -->
+      <el-table-column label="标题" align="center">
+        <template slot-scope="scope">
+          {{scope.row.title}}
+        </template>
+      </el-table-column>
+<el-table-column label="内容" align="center">
+        <template slot-scope="scope">
+          {{scope.row.content}}
+        </template>
+      </el-table-column>
+<el-table-column label="阅读数" align="center">
+        <template slot-scope="scope">
+          {{scope.row.readCount}}
+        </template>
+      </el-table-column>
+<el-table-column label="医生姓名" align="center">
+        <template slot-scope="scope">
+          {{scope.row.name}}
+        </template>
+      </el-table-column>
+<el-table-column label="医生电话" align="center">
+        <template slot-scope="scope">
+          {{scope.row.tel}}
+        </template>
+      </el-table-column>
+
       <!-- 操作 -->
       <el-table-column class-name="status-col" label="操作" align="center" width="220">
         <template slot-scope="scope">
@@ -46,7 +71,22 @@
         label-width="100px"
         style="width: 400px; margin-left:50px;"
       >
-        <!-- form insert -->
+        <el-form-item label="标题" prop="title">
+        <el-input v-model="row.title" placeHolder="请输入标题"/>
+      </el-form-item>
+<el-form-item label="内容" prop="content">
+        <el-input v-model="row.content" placeHolder="请输入内容"/>
+      </el-form-item>
+<el-form-item label="阅读数" prop="readCount">
+        <el-input v-model="row.readCount" placeHolder="请输入阅读数"/>
+      </el-form-item>
+<el-form-item label="医生姓名" prop="name">
+        <el-input v-model="row.name" placeHolder="请输入医生姓名"/>
+      </el-form-item>
+<el-form-item label="医生电话" prop="tel">
+        <el-input v-model="row.tel" placeHolder="请输入医生电话"/>
+      </el-form-item>
+
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -68,7 +108,7 @@ export default {
   data() {
     return {
       // 本页查看的对象名称
-      objStr: "##filename##",
+      objStr: "article",
       // 数据源
       source: DataSource
     };
@@ -83,12 +123,22 @@ export default {
 class DataSource extends AdminObject {
   // 默认的内容
   static defaultObject = {
-    /** property */
+    title:"",
+    content:"",
+    readCount:"",
+    name:"",
+    tel:"",
+    
   };
 
   // 表单规则
   static rules = {
-    /** rules */
+    title:[{ required: true, message: "必填", trigger: "blur" }],
+    content:[{ required: true, message: "必填", trigger: "blur" }],
+    readCount:[{ required: true, message: "必填", trigger: "blur" }],
+    name:[{ required: true, message: "必填", trigger: "blur" }],
+    tel:[{ required: true, message: "必填", trigger: "blur" }],
+    
   };
 
   /**

@@ -2,45 +2,25 @@
 const { file, find, savefile, mkdir, exists } = require("../../tools/file");
 
 // 模板字符
-const { row, input } = require("../../tools/builder");
+const { row, input, date } = require("../../tools/builder");
+
+const Bmob = require("hydrogen-js-sdk");
+
+let pages_path = "table-pages";
+let source_path = "table-source";
 
 let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
-function assetsPath() {
-  let p = `${__dirname}/../../public`;
-  console.log(p);
-  return p;
-}
-let pages_path = "table-pages";
-let source_path = "table-source";
-/**
- * onCommand 主入口
- */
-async function onCommand(command, value) {
-  await config();
-  console.log(`Standart 执行命令:${command} 参数:${value}`);
-  try {
-    if (command == "init") {
-      init();
-    }
-    if (command == "addRouter") {
-      addRouter();
-    }
-    if (command == "build") {
-      if (value == "all") {
-        await buildAll();
-      } else {
-        await buildFileName(value);
-      }
-    }
-    if (command == "config") {
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
+let tableList = [];
+let appid = "";
+let restfulKey = "";
 
+function assetsPath() {
+  let path = `${__dirname}/../../public`;
+  console.log(path);
+  return path;
+}
 async function config() {
   let config;
   if (exists(`${process.cwd()}/table-cli-config.json`)) {
@@ -55,37 +35,75 @@ async function config() {
   console.log(`使用config:`, config);
   pages_path = config.path.pages_path || pages_path;
   source_path = config.path.source_path || source_path;
+  let bmob = config.bmob;
+  if (bmob) {
+    tableList = bmob.tables;
+    appid = bmob.appid;
+    restfulKey = bmob.restfulKey;
+  }
+}
+/**
+ * onCommand 主入口
+ */
+async function onCommand(command, value) {
+  console.log(`Standart 执行命令:${command} 参数:${value}`);
+  await config();
+  try {
+    if (command == "table") {
+      table();
+    }
+    if (command == "config") {
+      console.log(
+        `bmob config 已应用:\n${tableList}\nAppid:${appid}\nRestfulKey:${restfulKey}`,
+      );
+    }
+    if (command == "addRouter") {
+      addRouter();
+    }
+    if (command == "build") {
+      if (value == "all") {
+        await buildAll();
+      } else {
+        await buildFileName(value);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 /**
- * init功能，可以创建用于示例的文件夹
- *
+ * table功能，可以创建用于示例的文件夹
  */
-async function init() {
-  await mkdir("src");
-  await mkdir(`src/${pages_path}`);
-  await mkdir(`src/${source_path}`);
-
-  console.log("创建basic部分");
-  // 创建mixin
-  let mixinTemplate = await file(`${assetsPath()}/admin_mixin.js`);
-  await mkdir(`src/${pages_path}/basic`);
-  await savefile(
-    `${srcPath}/${pages_path}/basic/admin_mixin.js`,
-    mixinTemplate,
-  );
-  // 父类
-  let adminObjectTemp = await file(`${assetsPath()}/adminobject.js`);
-  await savefile(`src/${pages_path}/basic/adminobject.js`, adminObjectTemp);
-
-  console.log("创建example.json");
-  // 创建example
-  let exampleArticle = await file(`${__dirname}/assets/article.json`);
-  await mkdir(`src/${source_path}`);
-  await savefile(`${srcPath}/${source_path}/article.json`, exampleArticle);
-  // build一次example
-  await build("article");
-  console.log("init 完成");
+async function table() {
+  if (!appid) {
+    console.log("缺少appid");
+  }
+  if (!restfulKey) {
+    console.log("缺少restfulKey");
+  }
+  Bmob.initialize(appid, restfulKey);
+  for (const tableName of tableList) {
+    let query = Bmob.Query(tableName);
+    query.limit(1);
+    let resList = await query.find();
+    if (resList.length == 0) {
+      console.log(`ERROR: 表${tableName} 中需要先写入一个对象`);
+      continue;
+    }
+    let res = resList[0];
+    let target = {};
+    for (const key in res) {
+      //TODO: 考虑数据类型不是String的情况
+      target[key] = key;
+    }
+    await mkdir(`${srcPath}`);
+    await mkdir(`${srcPath}/${source_path}`);
+    await savefile(
+      `${srcPath}/${source_path}/${tableName}.json`,
+      JSON.stringify(target,null,2),
+    );
+  }
 }
 
 // build入口
@@ -143,16 +161,26 @@ async function buildFilePath(filePath) {
   let form = "";
   let defaultObject = "";
   let rules = "";
+  // bmob only
+  let edit = "";
 
   for (const key in tempObject) {
     if (tempObject.hasOwnProperty(key)) {
       let element = tempObject[key];
+      let type = "string";
       if (element instanceof Object) {
         element = element.description;
+        type = element.type;
       }
       // 页面表格与表单
       table += await row(key, element);
-      form += await input(key, element);
+      if (type == "string") {
+        form += await input(key, element);
+      } else if (type == "date") {
+        form += await date(key, element);
+      }
+      //bmob
+      edit += `    res.set("${key}", obj.${key})\n`;
       // 数据类和表单规则
       defaultObject += `${key}:"",\n    `;
       rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
@@ -165,6 +193,11 @@ async function buildFilePath(filePath) {
   pageTemplate = pageTemplate.replace(/##filename##/g, fileName);
   pageTemplate = pageTemplate.replace("/** property */", defaultObject);
   pageTemplate = pageTemplate.replace("/** rules */", rules);
+  // bmob
+  exampleObjectTemp = exampleObjectTemp.replace("/** edit */", edit);
+  exampleObjectTemp = exampleObjectTemp.replace("/** add */", edit);
+  exampleObjectTemp = exampleObjectTemp.replace("##tableName##", fileName);
+
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
   await savefile(
@@ -173,39 +206,6 @@ async function buildFilePath(filePath) {
   );
   console.log("保存文件完成\n");
   return;
-}
-/**
- *
- */
-async function addRouter() {
-  let pathList = find(`${srcPath}/${source_path}/`);
-  let routerCode = "/* cli-route-insert */\n";
-  for (const filePath of pathList) {
-    let fileName = filePath.substring(
-      filePath.lastIndexOf("/") + 1,
-      filePath.length,
-    );
-    fileName = fileName.replace(".json", "");
-    // 添加路由代码
-    routerCode += `{
-    path: "",
-    component: Layout,
-    redirect: "${fileName}",
-    children: [
-      {
-        path: "${fileName}",
-        component: () => import("@/${pages_path}/${fileName}Manage.vue"),
-        name: "${fileName}",
-        meta: { title: "${fileName}", icon: "table", noCache: true },
-      },
-    ],
-  },
-  `;
-  }
-  let routeTemplate = await file(`${srcPath}/router/index.js`);
-  routeTemplate = routeTemplate.replace("/* cli-route */", routerCode);
-  console.log(routeTemplate);
-  await savefile(`${srcPath}/router/index.js`, routeTemplate);
 }
 
 module.exports = {

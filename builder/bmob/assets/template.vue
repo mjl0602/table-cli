@@ -70,7 +70,7 @@ export default {
       // 本页查看的对象名称
       objStr: "##filename##",
       // 数据源
-      source: DataSource
+      source: new DataSource()
     };
   },
   methods: {}
@@ -82,14 +82,14 @@ const tableName = "##tableName##";
  * 增删查改等处理
  */
 
-class DataSource extends AdminObject {
+class DataSource {
   // 默认的内容
-  static defaultObject = {
+  defaultObject = {
     /** property */
   };
 
   // 表单规则
-  static rules = {
+  rules = {
     /** rules */
   };
   /**
@@ -99,7 +99,7 @@ class DataSource extends AdminObject {
    * 则页面出现翻页标签。
    *
    * */
-  static async all(q) {
+  async all(q) {
     let query = Bmob.Query(tableName);
     let count = await query.count();
     if (q.page && q.pageSize) {
@@ -116,7 +116,7 @@ class DataSource extends AdminObject {
   }
 
   // 上传修改
-  static async edit(obj) {
+  async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
     /** edit */
@@ -124,14 +124,14 @@ class DataSource extends AdminObject {
   }
 
   // 添加
-  static async add(obj) {
+  async add(obj) {
     let res = Bmob.Query(tableName);
     /** add */
     return res.save();
   }
 
   // 删除
-  static async deleteObj(obj) {
+  async deleteObj(obj) {
     let bq = Bmob.Query(tableName);
     return bq.destroy(obj.objectId);
   }

@@ -1,0 +1,12 @@
+{
+  "name": "Table-Cli Config",
+  "path": {
+    "pages_path": "table-pages",
+    "source_path": "table-source"
+  },
+  "bmob": {
+    "tables":[],
+    "appid": "",
+    "restfulKey": ""
+  }
+}
