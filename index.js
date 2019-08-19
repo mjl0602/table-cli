@@ -73,6 +73,7 @@ async function main(args) {
      * TODO: YAPI command
      */
     // 45牛逼
+    yapi.onCommand(args[3], args[4]='vue-demo')
   } else if (args[2] == "bmob") {
     try {
       await bmob.onCommand(args[3], args[4]);
