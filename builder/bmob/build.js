@@ -196,9 +196,9 @@ async function buildFilePath(filePath) {
   pageTemplate = pageTemplate.replace("/** property */", defaultObject);
   pageTemplate = pageTemplate.replace("/** rules */", rules);
   // bmob
-  exampleObjectTemp = exampleObjectTemp.replace("/** edit */", edit);
-  exampleObjectTemp = exampleObjectTemp.replace("/** add */", edit);
-  exampleObjectTemp = exampleObjectTemp.replace("##tableName##", fileName);
+  pageTemplate = pageTemplate.replace("/** edit */", edit);
+  pageTemplate = pageTemplate.replace("/** add */", edit);
+  pageTemplate = pageTemplate.replace("##tableName##", fileName);
 
   await mkdir("src");
   await mkdir(`src/${pages_path}`);
