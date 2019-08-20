@@ -59,7 +59,7 @@ async function onCommand(command, value) {
       );
     }
     if (command == "addRouter") {
-      addRouter();
+      // addRouter();
     }
     if (command == "build") {
       if (value == "all") {

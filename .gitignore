@@ -1,1 +1,4 @@
 node_modules/*
+builder/bmob/test/*
+builder/standard/test/*
+builder/yapi/vue-demo/*

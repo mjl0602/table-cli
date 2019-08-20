@@ -16,39 +16,25 @@
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column label="解释" align="center">
-        <template slot-scope="scope">
-          {{scope.row.account}}
-        </template>
+        <template slot-scope="scope">{{scope.row.account}}</template>
       </el-table-column>
-<el-table-column label="创建日期" align="center">
-        <template slot-scope="scope">
-          {{scope.row.createdAt}}
-        </template>
+      <el-table-column label="创建日期" align="center">
+        <template slot-scope="scope">{{scope.row.createdAt}}</template>
       </el-table-column>
-<el-table-column label="名称" align="center">
-        <template slot-scope="scope">
-          {{scope.row.name}}
-        </template>
+      <el-table-column label="名称" align="center">
+        <template slot-scope="scope">{{scope.row.name}}</template>
       </el-table-column>
-<el-table-column label="对象ID" align="center">
-        <template slot-scope="scope">
-          {{scope.row.objectId}}
-        </template>
+      <el-table-column label="对象ID" align="center">
+        <template slot-scope="scope">{{scope.row.objectId}}</template>
       </el-table-column>
-<el-table-column label="密码" align="center">
-        <template slot-scope="scope">
-          {{scope.row.password}}
-        </template>
+      <el-table-column label="密码" align="center">
+        <template slot-scope="scope">{{scope.row.password}}</template>
       </el-table-column>
-<el-table-column label="角色" align="center">
-        <template slot-scope="scope">
-          {{scope.row.roles}}
-        </template>
+      <el-table-column label="角色" align="center">
+        <template slot-scope="scope">{{scope.row.roles}}</template>
       </el-table-column>
-<el-table-column label="更新日期" align="center">
-        <template slot-scope="scope">
-          {{scope.row.updatedAt}}
-        </template>
+      <el-table-column label="更新日期" align="center">
+        <template slot-scope="scope">{{scope.row.updatedAt}}</template>
       </el-table-column>
 
       <!-- 操作 -->
@@ -82,27 +68,26 @@
         style="width: 400px; margin-left:50px;"
       >
         <el-form-item label="解释" prop="account">
-        <el-input v-model="row.account" placeHolder="请输入解释"/>
-      </el-form-item>
-<el-form-item label="创建日期" prop="createdAt">
-        <el-input v-model="row.createdAt" placeHolder="请输入创建日期"/>
-      </el-form-item>
-<el-form-item label="名称" prop="name">
-        <el-input v-model="row.name" placeHolder="请输入名称"/>
-      </el-form-item>
-<el-form-item label="对象ID" prop="objectId">
-        <el-input v-model="row.objectId" placeHolder="请输入对象ID"/>
-      </el-form-item>
-<el-form-item label="密码" prop="password">
-        <el-input v-model="row.password" placeHolder="请输入密码"/>
-      </el-form-item>
-<el-form-item label="角色" prop="roles">
-        <el-input v-model="row.roles" placeHolder="请输入角色"/>
-      </el-form-item>
-<el-form-item label="更新日期" prop="updatedAt">
-        <el-input v-model="row.updatedAt" placeHolder="请输入更新日期"/>
-      </el-form-item>
-
+          <el-input v-model="row.account" placeholder="请输入解释" />
+        </el-form-item>
+        <el-form-item label="创建日期" prop="createdAt">
+          <el-input v-model="row.createdAt" placeholder="请输入创建日期" />
+        </el-form-item>
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="row.name" placeholder="请输入名称" />
+        </el-form-item>
+        <el-form-item label="对象ID" prop="objectId">
+          <el-input v-model="row.objectId" placeholder="请输入对象ID" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="row.password" placeholder="请输入密码" />
+        </el-form-item>
+        <el-form-item label="角色" prop="roles">
+          <el-input v-model="row.roles" placeholder="请输入角色" />
+        </el-form-item>
+        <el-form-item label="更新日期" prop="updatedAt">
+          <el-input v-model="row.updatedAt" placeholder="请输入更新日期" />
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -141,26 +126,24 @@ const tableName = "admin";
 class DataSource {
   // 默认的内容
   defaultObject = {
-    account:"",
-    createdAt:"",
-    name:"",
-    objectId:"",
-    password:"",
-    roles:"",
-    updatedAt:"",
-    
+    account: "",
+    createdAt: "",
+    name: "",
+    objectId: "",
+    password: "",
+    roles: "",
+    updatedAt: ""
   };
 
   // 表单规则
   rules = {
-    account:[{ required: true, message: "必填", trigger: "blur" }],
-    createdAt:[{ required: true, message: "必填", trigger: "blur" }],
-    name:[{ required: true, message: "必填", trigger: "blur" }],
-    objectId:[{ required: true, message: "必填", trigger: "blur" }],
-    password:[{ required: true, message: "必填", trigger: "blur" }],
-    roles:[{ required: true, message: "必填", trigger: "blur" }],
-    updatedAt:[{ required: true, message: "必填", trigger: "blur" }],
-    
+    account: [{ required: true, message: "必填", trigger: "blur" }],
+    createdAt: [{ required: true, message: "必填", trigger: "blur" }],
+    name: [{ required: true, message: "必填", trigger: "blur" }],
+    objectId: [{ required: true, message: "必填", trigger: "blur" }],
+    password: [{ required: true, message: "必填", trigger: "blur" }],
+    roles: [{ required: true, message: "必填", trigger: "blur" }],
+    updatedAt: [{ required: true, message: "必填", trigger: "blur" }]
   };
   /**
    * 【查询全部】
@@ -189,13 +172,13 @@ class DataSource {
   async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
-        res.set("account", obj.account)
-    res.set("createdAt", obj.createdAt)
-    res.set("name", obj.name)
-    res.set("objectId", obj.objectId)
-    res.set("password", obj.password)
-    res.set("roles", obj.roles)
-    res.set("updatedAt", obj.updatedAt)
+    res.set("account", obj.account);
+    res.set("createdAt", obj.createdAt);
+    res.set("name", obj.name);
+    res.set("objectId", obj.objectId);
+    res.set("password", obj.password);
+    res.set("roles", obj.roles);
+    res.set("updatedAt", obj.updatedAt);
 
     return res.save();
   }
@@ -203,13 +186,13 @@ class DataSource {
   // 添加
   async add(obj) {
     let res = Bmob.Query(tableName);
-        res.set("account", obj.account)
-    res.set("createdAt", obj.createdAt)
-    res.set("name", obj.name)
-    res.set("objectId", obj.objectId)
-    res.set("password", obj.password)
-    res.set("roles", obj.roles)
-    res.set("updatedAt", obj.updatedAt)
+    res.set("account", obj.account);
+    res.set("createdAt", obj.createdAt);
+    res.set("name", obj.name);
+    res.set("objectId", obj.objectId);
+    res.set("password", obj.password);
+    res.set("roles", obj.roles);
+    res.set("updatedAt", obj.updatedAt);
 
     return res.save();
   }
