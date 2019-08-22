@@ -16,22 +16,34 @@
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column label="创建日期" align="center">
-        <template slot-scope="scope">{{scope.row.createdAt}}</template>
+        <template slot-scope="scope">
+          {{scope.row.createdAt}}
+        </template>
       </el-table-column>
-      <el-table-column label="名称" align="center">
-        <template slot-scope="scope">{{scope.row.name}}</template>
+<el-table-column label="名称" align="center">
+        <template slot-scope="scope">
+          {{scope.row.name}}
+        </template>
       </el-table-column>
-      <el-table-column label="对象ID" align="center">
-        <template slot-scope="scope">{{scope.row.objectId}}</template>
+<el-table-column label="对象ID" align="center">
+        <template slot-scope="scope">
+          {{scope.row.objectId}}
+        </template>
       </el-table-column>
-      <el-table-column label="磷" align="center">
-        <template slot-scope="scope">{{scope.row.p}}</template>
+<el-table-column label="磷" align="center">
+        <template slot-scope="scope">
+          {{scope.row.p}}
+        </template>
       </el-table-column>
-      <el-table-column label="更新日期" align="center">
-        <template slot-scope="scope">{{scope.row.updatedAt}}</template>
+<el-table-column label="更新日期" align="center">
+        <template slot-scope="scope">
+          {{scope.row.updatedAt}}
+        </template>
       </el-table-column>
-      <el-table-column label="网址" align="center">
-        <template slot-scope="scope">{{scope.row.url}}</template>
+<el-table-column label="网址" align="center">
+        <template slot-scope="scope">
+          {{scope.row.url}}
+        </template>
       </el-table-column>
 
       <!-- 操作 -->
@@ -64,24 +76,16 @@
         label-width="100px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="创建日期" prop="createdAt">
-          <el-input v-model="row.createdAt" placeholder="请输入创建日期" />
-        </el-form-item>
         <el-form-item label="名称" prop="name">
-          <el-input v-model="row.name" placeholder="请输入名称" />
-        </el-form-item>
-        <el-form-item label="对象ID" prop="objectId">
-          <el-input v-model="row.objectId" placeholder="请输入对象ID" />
-        </el-form-item>
-        <el-form-item label="磷" prop="p">
-          <el-input v-model="row.p" placeholder="请输入磷" />
-        </el-form-item>
-        <el-form-item label="更新日期" prop="updatedAt">
-          <el-input v-model="row.updatedAt" placeholder="请输入更新日期" />
-        </el-form-item>
-        <el-form-item label="网址" prop="url">
-          <el-input v-model="row.url" placeholder="请输入网址" />
-        </el-form-item>
+        <el-input v-model="row.name" placeHolder="请输入名称"/>
+      </el-form-item>
+<el-form-item label="磷" prop="p">
+        <el-input v-model="row.p" placeHolder="请输入磷"/>
+      </el-form-item>
+<el-form-item label="网址" prop="url">
+        <el-input v-model="row.url" placeHolder="请输入网址"/>
+      </el-form-item>
+
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -120,22 +124,18 @@ const tableName = "git";
 class DataSource {
   // 默认的内容
   defaultObject = {
-    createdAt: "",
-    name: "",
-    objectId: "",
-    p: "",
-    updatedAt: "",
-    url: ""
+    name:"",
+    p:"",
+    url:"",
+    
   };
 
   // 表单规则
   rules = {
-    createdAt: [{ required: true, message: "必填", trigger: "blur" }],
-    name: [{ required: true, message: "必填", trigger: "blur" }],
-    objectId: [{ required: true, message: "必填", trigger: "blur" }],
-    p: [{ required: true, message: "必填", trigger: "blur" }],
-    updatedAt: [{ required: true, message: "必填", trigger: "blur" }],
-    url: [{ required: true, message: "必填", trigger: "blur" }]
+    name:[{ required: true, message: "必填", trigger: "blur" }],
+    p:[{ required: true, message: "必填", trigger: "blur" }],
+    url:[{ required: true, message: "必填", trigger: "blur" }],
+    
   };
   /**
    * 【查询全部】
@@ -164,12 +164,9 @@ class DataSource {
   async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
-    res.set("createdAt", obj.createdAt);
-    res.set("name", obj.name);
-    res.set("objectId", obj.objectId);
-    res.set("p", obj.p);
-    res.set("updatedAt", obj.updatedAt);
-    res.set("url", obj.url);
+        res.set("name", obj.name)
+    res.set("p", obj.p)
+    res.set("url", obj.url)
 
     return res.save();
   }
@@ -177,12 +174,9 @@ class DataSource {
   // 添加
   async add(obj) {
     let res = Bmob.Query(tableName);
-    res.set("createdAt", obj.createdAt);
-    res.set("name", obj.name);
-    res.set("objectId", obj.objectId);
-    res.set("p", obj.p);
-    res.set("updatedAt", obj.updatedAt);
-    res.set("url", obj.url);
+        res.set("name", obj.name)
+    res.set("p", obj.p)
+    res.set("url", obj.url)
 
     return res.save();
   }

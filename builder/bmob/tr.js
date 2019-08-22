@@ -32,7 +32,12 @@ async function loadZhValue(object) {
   );
   console.log(res.data);
   for (const value of res.data.trans_result) {
-    object[value.src] = value.dst;
+    let res = object[value.src];
+    if (res.description) {
+      object[value.src].description = value.dst;
+    } else {
+      object[value.src] = value.dst;
+    }
   }
   console.log("百度翻译不允许频繁调用，间隔1秒……");
   await delay(1000);

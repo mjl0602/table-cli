@@ -89,14 +89,22 @@ async function table() {
     query.limit(1);
     let resList = await query.find();
     if (resList.length == 0) {
-      console.log(`ERROR: 表${tableName} 中需要先写入一个对象`);
+      console.log(`ERROR: ${tableName} 表中需要先写入一个对象`);
       continue;
     }
     let res = resList[0];
     let target = {};
     for (const key in res) {
       //TODO: 考虑数据类型不是String的情况
-      target[key] = key;
+      let value = res[key];
+      if (typeof value == "number") {
+        target[key] = {
+          type: "number",
+          description: key,
+        };
+      } else {
+        target[key] = value;
+      }
     }
     target = await loadZhValue(target);
     await mkdir(`${srcPath}`);
@@ -105,20 +113,6 @@ async function table() {
       `${srcPath}/${source_path}/${tableName}.json`,
       JSON.stringify(target, null, 2),
     );
-  }
-}
-
-// build入口
-async function build(command) {
-  if (!command) {
-    console.log("build后缺少文件命令,是否想输入build all?\n");
-    return;
-  }
-  if (command == "all") {
-    console.log("读取目录下所有文件\n");
-    await buildAll();
-  } else {
-    await buildFileName(command);
   }
 }
 
@@ -165,27 +159,38 @@ async function buildFilePath(filePath) {
   let rules = "";
   // bmob only
   let edit = "";
-
+  console.log("tempObject", tempObject);
   for (const key in tempObject) {
     if (tempObject.hasOwnProperty(key)) {
       let element = tempObject[key];
       let type = "string";
       if (element instanceof Object) {
-        element = element.description;
         type = element.type;
+        element = element.description;
       }
       // 页面表格与表单
       table += await row(key, element);
-      if (type == "string") {
-        form += await input(key, element);
-      } else if (type == "date") {
-        form += await date(key, element);
+      if (key == "objectId" || key == "createdAt" || key == "updatedAt") {
+        console.log("跳过保留字段");
+      } else {
+        console.log(key, type, element);
+        if (type == "string") {
+          form += await input(key, element);
+          edit += `    res.set("${key}", obj.${key})\n`;
+          defaultObject += `${key}:"",\n    `;
+          rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
+        } else if (type == "number") {
+          form += await input(key, element);
+          edit += `    res.set("${key}", parserInt(obj.${key}))\n`;
+          defaultObject += `${key}:0,\n    `;
+          rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
+        } else if (type == "date") {
+          form += await date(key, element);
+          edit += `    res.set("${key}", new Date(obj.${key}))\n`;
+          defaultObject += `${key}:new Date(),\n    `;
+          rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
+        }
       }
-      //bmob
-      edit += `    res.set("${key}", obj.${key})\n`;
-      // 数据类和表单规则
-      defaultObject += `${key}:"",\n    `;
-      rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
     }
   }
   // 创建页面

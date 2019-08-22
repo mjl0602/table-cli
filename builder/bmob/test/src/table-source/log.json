@@ -1,6 +1,9 @@
 {
   "createdAt": "创建日期",
-  "date": "日期",
+  "date": {
+    "type": "number",
+    "description": "日期"
+  },
   "objectId": "对象ID",
   "p": "磷",
   "text": "文本",
