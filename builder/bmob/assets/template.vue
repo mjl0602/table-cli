@@ -12,9 +12,6 @@
       highlight-current-row
     >
       <!-- 内容 -->
-      <el-table-column label="id" align="center">
-        <template slot-scope="scope">{{ scope.row.id }}</template>
-      </el-table-column>
       <!-- table insert -->
       <!-- 操作 -->
       <el-table-column class-name="status-col" label="操作" align="center" width="220">
@@ -41,7 +38,7 @@
     <el-dialog :visible.sync="addDialogVisible" :title="dialogTitle">
       <el-form
         :model="row"
-        :rules="rules"
+        :rules="source.rules"
         label-position="left"
         label-width="100px"
         style="width: 400px; margin-left:50px;"
@@ -119,15 +116,21 @@ class DataSource {
   async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
-    /** edit */
+    res = buildObj(res, obj);
     return res.save();
   }
 
   // 添加
   async add(obj) {
     let res = Bmob.Query(tableName);
-    /** add */
+    res = buildObj(res, obj);
     return res.save();
+  }
+
+  // 修改对象
+  async buildObj(res, obj) {
+    /** edit */
+    return res;
   }
 
   // 删除

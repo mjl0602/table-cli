@@ -1,5 +1,5 @@
 // 文件操作
-const { file, find, savefile, mkdir, exists } = require("../../tools/file");
+const { file, find, savefile, mkdir, exists, rm } = require("../../tools/file");
 
 // 模板字符
 const { row, input, date } = require("../../tools/builder");
@@ -15,6 +15,7 @@ let execPath = process.cwd();
 let srcPath = `${execPath}/src`;
 
 let tableList = [];
+let ignoreList = [];
 let appid = "";
 let restfulKey = "";
 
@@ -27,12 +28,13 @@ async function config() {
   let config;
   if (exists(`${process.cwd()}/table-cli-config.json`)) {
     console.log("读取现有config");
-    config = require(`${process.cwd()}/table-cli-config.json`);
+    // config = require(`${process.cwd()}/table-cli-config.json`);
   } else {
     console.log("创建一个默认config");
-    let configContent = await file(`${assetsPath()}/table-cli-config.json`);
+    let configContent = await file(`${__dirname}/assets/table-cli-config.json`);
     await savefile(`${process.cwd()}/table-cli-config.json`, configContent);
   }
+  config = require(`${process.cwd()}/table-cli-config.json`);
   console.log(`使用config:`, config);
   pages_path = config.path.pages_path || pages_path;
   source_path = config.path.source_path || source_path;
@@ -41,6 +43,7 @@ async function config() {
     tableList = bmob.tables;
     appid = bmob.appid;
     restfulKey = bmob.restfulKey;
+    ignoreList = bmob.ignore;
   }
 }
 /**
@@ -68,10 +71,16 @@ async function onCommand(command, value) {
         await buildFileName(value);
       }
     }
+    if (command == "clear") {
+      rm(`${srcPath}/${source_path}/`);
+      rm(`${srcPath}/${pages_path}/`);
+    }
   } catch (error) {
     console.log(error);
   }
 }
+
+function clear() {}
 
 /**
  * table功能，可以创建用于示例的文件夹
@@ -168,12 +177,14 @@ async function buildFilePath(filePath) {
         type = element.type;
         element = element.description;
       }
-      // 页面表格与表单
-      table += await row(key, element);
-      if (key == "objectId" || key == "createdAt" || key == "updatedAt") {
-        console.log("跳过保留字段");
+
+      if (ignoreList.indexOf(key) >= 0) {
+        console.log("跳过保留字段", key);
       } else {
         console.log(key, type, element);
+        // 页面表格与表单
+        table += await row(key, element);
+        // 按类型分别生成
         if (type == "string") {
           form += await input(key, element);
           edit += `    res.set("${key}", obj.${key})\n`;
@@ -202,7 +213,7 @@ async function buildFilePath(filePath) {
   pageTemplate = pageTemplate.replace("/** rules */", rules);
   // bmob
   pageTemplate = pageTemplate.replace("/** edit */", edit);
-  pageTemplate = pageTemplate.replace("/** add */", edit);
+  // pageTemplate = pageTemplate.replace("/** add */", edit);
   pageTemplate = pageTemplate.replace("##tableName##", fileName);
 
   await mkdir("src");

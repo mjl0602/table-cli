@@ -12,27 +12,14 @@
       highlight-current-row
     >
       <!-- 内容 -->
-      <el-table-column label="id" align="center">
-        <template slot-scope="scope">{{ scope.row.id }}</template>
-      </el-table-column>
       <el-table-column label="解释" align="center">
         <template slot-scope="scope">
           {{scope.row.account}}
         </template>
       </el-table-column>
-<el-table-column label="创建日期" align="center">
-        <template slot-scope="scope">
-          {{scope.row.createdAt}}
-        </template>
-      </el-table-column>
 <el-table-column label="名称" align="center">
         <template slot-scope="scope">
           {{scope.row.name}}
-        </template>
-      </el-table-column>
-<el-table-column label="对象ID" align="center">
-        <template slot-scope="scope">
-          {{scope.row.objectId}}
         </template>
       </el-table-column>
 <el-table-column label="密码" align="center">
@@ -43,11 +30,6 @@
 <el-table-column label="角色" align="center">
         <template slot-scope="scope">
           {{scope.row.roles}}
-        </template>
-      </el-table-column>
-<el-table-column label="更新日期" align="center">
-        <template slot-scope="scope">
-          {{scope.row.updatedAt}}
         </template>
       </el-table-column>
 
@@ -174,23 +156,24 @@ class DataSource {
   async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
-        res.set("account", obj.account)
-    res.set("name", obj.name)
-    res.set("password", obj.password)
-    res.set("roles", obj.roles)
-
+    res = buildObj(res, obj);
     return res.save();
   }
 
   // 添加
   async add(obj) {
     let res = Bmob.Query(tableName);
+    res = buildObj(res, obj);
+    return res.save();
+  }
+
+  async buildObj(res, obj) {
         res.set("account", obj.account)
     res.set("name", obj.name)
     res.set("password", obj.password)
     res.set("roles", obj.roles)
 
-    return res.save();
+    return res;
   }
 
   // 删除

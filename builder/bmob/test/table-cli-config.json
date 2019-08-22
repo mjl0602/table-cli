@@ -5,7 +5,8 @@
     "source_path": "table-source"
   },
   "bmob": {
-    "tables": ["admin", "git", "log"],
+    "ignore": ["objectId", "createdAt", "updatedAt"],
+    "tables": ["admin"],
     "appid": "e74e25be16b964ce7850299b3739a7bb",
     "restfulKey": "3a1e72a5546f810d9a1da0db98f17bac"
   }
