@@ -116,14 +116,14 @@ class DataSource {
   async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
-    res = buildObj(res, obj);
+    res = this.buildObj(res, obj);
     return res.save();
   }
 
   // 添加
   async add(obj) {
     let res = Bmob.Query(tableName);
-    res = buildObj(res, obj);
+    res = this.buildObj(res, obj);
     return res.save();
   }
 
