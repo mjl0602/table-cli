@@ -54,7 +54,7 @@ async function onCommand(command, value) {
   await config();
   try {
     if (command == "table") {
-      table();
+      table(value);
     }
     if (command == "config") {
       console.log(
@@ -85,7 +85,7 @@ function clear() {}
 /**
  * table功能，可以创建用于示例的文件夹
  */
-async function table() {
+async function table(value) {
   if (!appid) {
     console.log("缺少appid");
   }
@@ -93,6 +93,9 @@ async function table() {
     console.log("缺少restfulKey");
   }
   Bmob.initialize(appid, restfulKey);
+  if (value) {
+    tableList = [value];
+  }
   for (const tableName of tableList) {
     let query = Bmob.Query(tableName);
     query.limit(1);
