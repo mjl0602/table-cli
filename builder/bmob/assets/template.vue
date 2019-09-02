@@ -128,7 +128,7 @@ class DataSource {
   }
 
   // 修改对象
-  async buildObj(res, obj) {
+  buildObj(res, obj) {
     /** edit */
     return res;
   }
