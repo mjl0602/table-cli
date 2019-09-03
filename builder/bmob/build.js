@@ -19,6 +19,8 @@ let ignoreList = [];
 let appid = "";
 let restfulKey = "";
 
+const { BmobBuilder } = require("./bmobBuilder");
+
 function assetsPath() {
   let path = `${__dirname}/../../public`;
   console.log(path);
@@ -79,8 +81,6 @@ async function onCommand(command, value) {
     console.log(error);
   }
 }
-
-function clear() {}
 
 /**
  * table功能，可以创建用于示例的文件夹
@@ -165,59 +165,34 @@ async function buildFilePath(filePath) {
     return;
   }
 
-  let table = "";
-  let form = "";
-  let defaultObject = "";
-  let rules = "";
-  // bmob only
-  let edit = "";
+  let target = new BmobBuilder();
   console.log("tempObject", tempObject);
   for (const key in tempObject) {
     if (tempObject.hasOwnProperty(key)) {
-      let element = tempObject[key];
-      let type = "string";
-      if (element instanceof Object) {
-        type = element.type;
-        element = element.description;
+      let config = tempObject[key];
+      if (typeof config == "string") {
+        config = {
+          type: "string",
+          description: config,
+        };
       }
-
       if (ignoreList.indexOf(key) >= 0) {
         console.log("跳过保留字段", key);
       } else {
-        console.log(key, type, element);
-        // 页面表格与表单
-        table += await row(key, element);
-        // 按类型分别生成
-        if (type == "string") {
-          form += await input(key, element);
-          edit += `    res.set("${key}", obj.${key})\n`;
-          defaultObject += `${key}:"",\n    `;
-          rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
-        } else if (type == "number") {
-          form += await input(key, element);
-          edit += `    res.set("${key}", parserInt(obj.${key}))\n`;
-          defaultObject += `${key}:0,\n    `;
-          rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
-        } else if (type == "date") {
-          form += await date(key, element);
-          edit += `    res.set("${key}", new Date(obj.${key}))\n`;
-          defaultObject += `${key}:new Date(),\n    `;
-          rules += `${key}:[{ required: true, message: "必填", trigger: "blur" }],\n    `;
-        }
+        console.log(`\n======== 添加 ${key} ========\nConfig:`, config);
+        target.add(key, config);
       }
     }
   }
   // 创建页面
   let pageTemplate = await file(`${__dirname}/assets/template.vue`);
-  pageTemplate = pageTemplate.replace("<!-- table insert -->", table);
-  pageTemplate = pageTemplate.replace("<!-- form insert -->", form);
   pageTemplate = pageTemplate.replace(/##filename##/g, fileName);
-  pageTemplate = pageTemplate.replace("/** property */", defaultObject);
-  pageTemplate = pageTemplate.replace("/** rules */", rules);
-  // bmob
-  pageTemplate = pageTemplate.replace("/** edit */", edit);
-  // pageTemplate = pageTemplate.replace("/** add */", edit);
   pageTemplate = pageTemplate.replace("##tableName##", fileName);
+  pageTemplate = pageTemplate.replace("<!-- table insert -->", target.table);
+  pageTemplate = pageTemplate.replace("<!-- form insert -->", target.form);
+  pageTemplate = pageTemplate.replace("/** property */", target.defaultObject);
+  pageTemplate = pageTemplate.replace("/** rules */", target.rules);
+  pageTemplate = pageTemplate.replace("/** edit */", target.edit);
 
   await mkdir("src");
   await mkdir(`src/${pages_path}`);

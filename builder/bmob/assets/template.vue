@@ -67,7 +67,8 @@ export default {
       // 本页查看的对象名称
       objStr: "##filename##",
       // 数据源
-      source: new DataSource()
+      source: new DataSource(),
+      // rules: this.source.rules,
     };
   },
   methods: {}

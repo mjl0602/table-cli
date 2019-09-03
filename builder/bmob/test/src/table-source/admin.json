@@ -1,9 +1,17 @@
 {
-  "account": "解释",
-  "createdAt": "创建日期",
-  "name": "名称",
-  "objectId": "对象ID",
-  "password": "密码",
   "roles": "角色",
-  "updatedAt": "更新日期"
+  "update": {
+    "type": "string",
+    "formType": "date",
+    "submitType": "string",
+    "defaultValue":"23135",
+    "description": "更新日期"
+  },
+  "name": {
+    "type": "string",
+    "formType": "date",
+    "submitType": "string",
+    "defaultValue":"23135",
+    "description": "NNNNN"
+  }
 }

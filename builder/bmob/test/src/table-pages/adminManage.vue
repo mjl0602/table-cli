@@ -12,27 +12,22 @@
       highlight-current-row
     >
       <!-- 内容 -->
-      <el-table-column label="解释" align="center">
-        <template slot-scope="scope">
-          {{scope.row.account}}
-        </template>
-      </el-table-column>
-<el-table-column label="名称" align="center">
-        <template slot-scope="scope">
-          {{scope.row.name}}
-        </template>
-      </el-table-column>
-<el-table-column label="密码" align="center">
-        <template slot-scope="scope">
-          {{scope.row.password}}
-        </template>
-      </el-table-column>
-<el-table-column label="角色" align="center">
-        <template slot-scope="scope">
-          {{scope.row.roles}}
-        </template>
-      </el-table-column>
-
+      
+    <el-table-column label="角色" align="center">
+      <template slot-scope="scope">
+        {{scope.row.roles}}
+      </template>
+    </el-table-column>
+    <el-table-column label="更新日期" align="center">
+      <template slot-scope="scope">
+        {{scope.row.update}}
+      </template>
+    </el-table-column>
+    <el-table-column label="NNNNN" align="center">
+      <template slot-scope="scope">
+        {{scope.row.name}}
+      </template>
+    </el-table-column>
       <!-- 操作 -->
       <el-table-column class-name="status-col" label="操作" align="center" width="220">
         <template slot-scope="scope">
@@ -58,24 +53,29 @@
     <el-dialog :visible.sync="addDialogVisible" :title="dialogTitle">
       <el-form
         :model="row"
-        :rules="rules"
+        :rules="source.rules"
         label-position="left"
         label-width="100px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="解释" prop="account">
-        <el-input v-model="row.account" placeHolder="请输入解释"/>
-      </el-form-item>
-<el-form-item label="名称" prop="name">
-        <el-input v-model="row.name" placeHolder="请输入名称"/>
-      </el-form-item>
-<el-form-item label="密码" prop="password">
-        <el-input v-model="row.password" placeHolder="请输入密码"/>
-      </el-form-item>
-<el-form-item label="角色" prop="roles">
-        <el-input v-model="row.roles" placeHolder="请输入角色"/>
-      </el-form-item>
-
+        
+    <el-form-item label="角色" prop="roles">
+      <el-input v-model="row.roles" placeHolder="请输入角色"/>
+    </el-form-item>
+    <el-date-picker
+      v-model="row.update"
+      align="right"
+      type="date"
+      placeholder="选择更新日期"
+      :picker-options="datePickOption"
+      ></el-date-picker>
+    <el-date-picker
+      v-model="row.name"
+      align="right"
+      type="date"
+      placeholder="选择NNNNN"
+      :picker-options="datePickOption"
+      ></el-date-picker>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -99,7 +99,8 @@ export default {
       // 本页查看的对象名称
       objStr: "admin",
       // 数据源
-      source: new DataSource()
+      source: new DataSource(),
+      // rules: this.source.rules,
     };
   },
   methods: {}
@@ -114,19 +115,14 @@ const tableName = "admin";
 class DataSource {
   // 默认的内容
   defaultObject = {
-    account:"",
-    name:"",
-    password:"",
-    roles:"",
-    
+    undefined
   };
 
   // 表单规则
   rules = {
-    account:[{ required: true, message: "必填", trigger: "blur" }],
-    name:[{ required: true, message: "必填", trigger: "blur" }],
-    password:[{ required: true, message: "必填", trigger: "blur" }],
     roles:[{ required: true, message: "必填", trigger: "blur" }],
+    update:[{ required: true, message: "必填", trigger: "blur" }],
+    name:[{ required: true, message: "必填", trigger: "blur" }],
     
   };
   /**
@@ -156,23 +152,22 @@ class DataSource {
   async edit(obj) {
     let bq = Bmob.Query(tableName);
     let res = await bq.get(obj.objectId);
-    res = buildObj(res, obj);
+    res = this.buildObj(res, obj);
     return res.save();
   }
 
   // 添加
   async add(obj) {
     let res = Bmob.Query(tableName);
-    res = buildObj(res, obj);
+    res = this.buildObj(res, obj);
     return res.save();
   }
 
-  async buildObj(res, obj) {
-        res.set("account", obj.account)
+  // 修改对象
+  buildObj(res, obj) {
+    res.set("update", obj.update)
     res.set("name", obj.name)
-    res.set("password", obj.password)
-    res.set("roles", obj.roles)
-
+    
     return res;
   }
 
