@@ -38,6 +38,7 @@
         :page-sizes="[5,10,20,30,50]"
         :page-size="query.pageSize"
         :total="query.total"
+        background
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
