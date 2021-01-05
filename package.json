@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/mjl0602/table-cli#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "follow-redirects": "^1.7.0",
     "hydrogen-js-sdk": "^1.7.0",
     "md5js": "^1.0.7"
